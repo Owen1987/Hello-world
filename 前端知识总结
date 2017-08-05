@@ -1,0 +1,21 @@
+web前端的相关知识分解
+知识点一：web前端分一般为3个部分：
+  第1部分：根据客户的相关原型项目，绘制原型图，以及小图片icon，切图(前端设计部分-UI)
+  第2部分：通过div+css或者布局框架呈现静态页面（静态网页）
+  第3部分：通过js相关代码实现一些特效以及数据交互，增体验效果，让页面动起来（动态网页）
+  补充：web前端即浏览器端，
+      设计方面有：AI  potoshoop
+     主要的使用的有语言有:html、html5 、css、css3、javascript
+     主要的使用框架有：
+        jquery bootstrap webix  jqueryUI(布局类)    
+        react.js   vue.js  angular.js （mv*类）    
+        highchar.js  echar.js（图表处理类）
+        
+        相关的一些平台：jalor5    hae等
+   后端：服务器端
+   使用的语言有：java  .net  PHP等
+   数据库：mySQL  SQLserver  PL—SQL
+        
+知识点二：
+  
+  
