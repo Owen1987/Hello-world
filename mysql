@@ -1,0 +1,263 @@
+--------通过数据库查询建表---------
+
+
+-- 取消外键约束检查
+set FOREIGN_KEY_CHECKS=0; 
+
+-- 创建登陆表
+DROP table if EXISTS admin;
+CREATE TABLE admin
+(
+  loginid int PRIMARY KEY auto_increment COMMENT'编号',
+  loginname VARCHAR(50) NOT NULL COMMENT'登陆名',
+  loginpsw  VARCHAR(10) NOT NULL COMMENT'登陆密码'
+
+);
+-- 插入测试数据
+ INSERT INTO admin(loginname,loginpsw) VALUES('admin','admin'),('jack','123456');
+-- 查询测试数据
+ SELECT * FROM admin;
+-- 创建专业表
+drop table if exists `major`;
+create TABLE major
+(
+	majorid int primary key auto_increment COMMENT'专业编号',
+  `majorname` varchar(50) not null COMMENT'专业名称' 
+ 
+);
+
+-- 创建学生表
+drop table if exists `student`;
+create TABLE student
+(
+	stuid int primary key auto_increment COMMENT'学号',
+  `name` varchar(50) not null COMMENT'姓名',
+	`sex` char(1) not null  COMMENT'性别' DEFAULT '男' ,
+	`majorid` int not null COMMENT'专业编号',
+	`birthday` datetime not null COMMENT'出生日期',
+	`phone` varchar(50) not null COMMENT'联系电话',
+	`email` varchar(50) COMMENT'邮箱',
+	`address` varchar(50) COMMENT'住址'
+);
+-- 以修改表的方式 添加外键约束
+alter table student 
+add constraint `fk_student_majorid` foreign key(`majorid`) REFERENCES major(majorid);
+-- 创建课程表
+drop table if exists `course`;
+create TABLE course
+(
+	courseid int primary key auto_increment COMMENT'课程编号',
+  `coursename` varchar(50) not null COMMENT'课程名称' ,
+	`majorid` int not null COMMENT'专业编号',
+   hours int not NULL COMMENT'课时数'
+);
+-- 以修改表的方式 添加外键约束
+alter table course 
+add constraint `fk_course_majorid` foreign key(`majorid`) REFERENCES major(majorid);
+
+-- 考试信息表
+drop table if exists `exam`;
+create TABLE exam
+(
+	stuid int not null COMMENT'学号',
+  courseid int not null COMMENT'课程编号' ,
+	examdate  datetime not null COMMENT'考试时间',
+  score int not NULL COMMENT'分数'
+);
+-- 以修改表的方式 添加外键约束
+alter table exam 
+add constraint `fk_exam_stuid` foreign key(`stuid`) REFERENCES student(stuid);
+alter table exam 
+add constraint `fk_exam_courseid` foreign key(`courseid`) REFERENCES course(courseid);
+-- 插入数据 （专业表）
+ insert into Major(majorname) values('数学'),('英语'),('计算机'),('物理'); -- 一次性插入多
+
+条数据		 
+-- 查询 测试数据
+select * from major;
+-- 插入 学生信息 
+insert INTO student(`name`,sex,majorid,birthday,phone,email,address)
+values('刘欢','女',1,'1998-3-5','13698597456','13698597456@qq.com','北京市'),
+('李国明','男',1,'1988-3-5','13698597456','13698597456@qq.com','北京市'),
+('徐欢','女',2,'1996-3-5','13698597456','13698597456@qq.com','北京市'),
+('黄明明','女',2,'1996-3-6','13698597456','13698597456@qq.com','北京市'),
+('张国栋','男',3,'1991-8-5','13698597456','13698597456@qq.com','北京市'),
+('徐丽丽','女',3,'1994-12-5','13698597456','13698597456@qq.com','北京市'),
+('许晴','男',3,'1990-3-1','13698597456','13698597456@qq.com','北京市'),
+('张明敏','男',1,'1993-7-5','13698597456','13698597456@qq.com','北京市'),
+('黄晓明','女',2,'1990-9-5','13698597456','13698597456@qq.com','北京市')
+;
+-- 查询 测试数据
+select * from student;
+-- 插入 课程数据
+insert into course(coursename,majorid,hours) values('几何数学',1,80);
+insert into course(coursename,majorid,hours) values('离散数学',1,89);
+insert into course(coursename,majorid,hours) values('商务英语',2,79);
+insert into course(coursename,majorid,hours) values('HTML',3,89);
+insert into course(coursename,majorid,hours) values('JavaScript',3,69);
+insert into course(coursename,majorid,hours) values('Java',3,77);
+insert into course(coursename,majorid,hours) values('MySQL',3,88);
+insert into course(coursename,majorid,hours) values('质量守恒定律',4,99);
+insert into course(coursename,majorid,hours) values('引力',4,77); 
+-- 查询测试数据
+select * from course;
+
+-- 插入  考试信息表  
+insert into Exam values
+(1,1,'2017-3-2',88),
+(1,2,'2016-5-2',52),
+(1,3,'2015-3-2',69),
+(1,4,'2014-3-2',52),
+(1,5,'2013-2-2',89), 
+
+(2,1,'2017-3-2',88),
+(2,2,'2016-5-2',52),
+(2,3,'2015-3-2',80),
+(2,4,'2014-3-2',52),
+(2,5,'2013-2-2',74), 
+
+(3,1,'2017-3-2',83),
+(3,2,'2016-5-2',69),
+(3,3,'2015-3-2',86),
+(3,4,'2014-3-2',79),
+(3,5,'2013-2-2',58), 
+
+(4,1,'2017-3-2',85),
+(4,2,'2016-5-2',52),
+(4,3,'2015-3-2',36),
+(4,4,'2014-3-2',42),
+(4,5,'2013-2-2',85)
+;
+
+
+
+
+----------数据库的各种操作---------
+-- 查询测试数据
+select * from Exam;
+
+-- ----------------对数据的操作-------------------
+-- select 查询数据
+-- insert 数据
+-- update 更新
+-- delete 删除 
+-- 1. update 示例
+update student set `NAME`='许晴晴',sex='女'
+where stuid=7;-- 更新编号为7的姓名  ,更新操作通常需要指定条件，否则整张表都会更新 。
+select * from student;
+
+-- 2. delete 示例
+-- 逻辑符 && || !   sql  and  or  not   sql等值判断使用但等号(=)而不是双等号。
+-- in(列表)
+-- delete FROM student where  stuid in(5,6,4); -- stuid=5 or stuid=6 or stuid=4 
+-- 删除where 匹配的条件
+select * from student;
+
+-- ---------------练习   
+  
+-- 	将学号为7的学生地址改为中山
+     update student set address='中山' where stuid=7;
+      
+-- 	将学号为2的学生出生日期改为1994-2-15
+			update student set birthday='1994-2-15' where stuid=2;
+-- 	将学号为8的学生所学专业改为HTML，并修改性别为女
+		update student set majorid=4,sex='女' where stuid=8;
+-- 	给所有低于80分的学生加5分
+     select * from exam;
+     update exam set score=score+5 where score<80;
+     select * from exam;
+-- 	修改MySQL的课时数为30课时
+		 update course set hours=30 where coursename='mysql';
+-- --------------select 查询练习 -------------------
+
+-- 	1.查询全部女的学生信息，查询条件是难点，查询条件由表达式组成，运算符、变量、常量、函数
+			select * from student where sex='女'; -- * 表示查询所有的列
+--  2.查询全部男的学生的姓名和电话
+			select `name` as 姓名,phone as 电话 from student where sex='男';--  使用as 给列取别名 
+-- 	3.查询分数及格同学的信息
+			select * from exam where score >= 60;
+-- 	4.查询课时超过50的课程信息
+			select * from course where hours>50;
+-- 	5.查询所有1990年以后出生的学生姓名和地址信息
+			select * from student where birthday >= '1990-1-1';
+-- 	6.查询没有邮箱的学生信息
+			select * from student  where email is null ; -- 取反 is not null 查询非空的值。
+-- 	7.查询学生信息并按年龄从小到大排列
+			select * from student order by birthday DESC;  -- 使用order by关键字进行排序 desc 降序  asc 升序  放在查询语句的最后面。
+-- 	8.按课时数量降序排列查询课程信息
+			select * from course order by hours desc;
+-- 	9.查询成绩前3名的学生考试信息
+			select * from exam order by score desc LIMIT 1,3; /* limit 对记录的过滤 ，行号从1开始，第二个参数表示获取行的数量  参数1：起始行号，从1开始   参数2：表示获取行的数量*/
+
+-- ---------------------函数的使用-------------------------------------------------------------
+
+-- 	10.查询年龄超过20周岁的学生信息
+			select *  from student where DATEDIFF(NOW(),birthday)/365 >20;
+-- 	11.查询1月份过生日的学生信息
+			SELECT * from student where EXTRACT(MONTH FROM birthday)=1
+-- 	12.查询今天过生日的学生姓名及所在专业
+			SELECT * from student where EXTRACT(MONTH FROM birthday)=EXTRACT(MONTH FROM NOW()) AND EXTRACT(DAY FROM birthday)=EXTRACT(DAY FROM NOW());
+-- 	13.查询学号为“2”的学生Email的域名 （例如查询到 @qq.com）
+			select SUBSTR(email FROM POSITION('@' IN email)) as 域名  from student;  
+-- 	14.给没有邮箱的学生分配一个Email地址 (规则：当前年份+当前月份+当前日+四位随机数+@163.com)
+			update student SET email= CONCAT( EXTRACT(YEAR FROM NOW()),  EXTRACT(MONTH FROM NOW()),EXTRACT(DAY FROM NOW()),   RIGHT(RAND(),4)  ,'@qq.com')  
+			where email is null ;
+ 
+-- ---------------------模糊匹配查询的使用-------------------------------------------------------------
+
+-- 	15.查询住址为“广州”的学生姓名、电话、住址
+			select name,phone,address 
+			from student
+			where address  like '%广州%' 
+
+-- 	16.查询名称中含有“java”字样课程信息
+			select * from course where coursename like '%java%'
+
+-- 	17.查询电话中以“136”开头的学生信息
+			select * from student where phone like '136%'
+	
+-- ---------------------多表链接查询-------------------------------------------------------------
+  
+-- 	18.查询专业编号为1的专业名称、课程名称及学时 
+			select coursename,hours,majorname
+			from course
+			join major on course.majorid= major.majorid
+       --  使用 join ... on 连接多张表    条件：外键值与主键值相等  
+       --  为表取别名  
+			select coursename,hours,majorname
+			from course c -- 为表取别名   
+			join major m on c.majorid= m.majorid
+      -- 使用交叉连接过滤的方式实现等值连接查询 
+			select coursename,hours,majorname
+			from course c,major m
+			where c.majorid=m.majorid
+
+-- 	19.查询学生学号、姓名、考试课程名称及成绩（3表连接查询）
+			select e.stuid,s.`name`,c.coursename,score
+			from exam e
+			join student s on e.stuid=s.stuid
+			join course c on e.courseid=c.courseid
+
+-- 	20.查询参加“HTML”考试的学生姓名、成绩、考试日期 
+			select s.`name`,score,e.examdate
+			from exam e
+			join student s on e.stuid=s.stuid
+			join course c on e.courseid=c.courseid
+			where c.coursename='HTML'
+-- ---------------------聚合函数的使用-------------------------------------------------------------
+ 
+-- 	21.查询学生总人数 
+			select count(*) from student; -- count() 用来统计记录总数量   
+
+--  22.学号为4的学生考试总成绩
+			select SUM(score) as 总成绩  from exam -- 使用聚合函数  sum累加值  
+			where stuid=4;
+-- 	23.学号为3的学生所有考试的平均分
+			select avg(score) as 平均成绩  from exam -- 使用聚合函数  avg()求平均值    
+			where stuid=3;
+
+-- 	24.查询2016年3月01日 “web前端”课程的最高分、最低分、平均分 
+			select max(score) as 最高分,min(score) as 最低分, avg(score) as 平均分
+			from exam e
+			join course c on e.courseid=c.courseid 
+			where c.coursename='html' and e.examdate='2014-03-02'
