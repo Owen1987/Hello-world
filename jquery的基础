@@ -1,0 +1,227 @@
+jQuery的课堂笔记：
+1. 优势：体积小，压缩后100KB左右
+     强大的选择器 出色的DOM封装 可靠的事件处理机制 出色的浏览器兼容
+ 2.$(document).ready()与window.onload比较
+ 执行时机 ：
+   前者： 必须等网页中所有的内容加载完毕才来执行
+  后者：网页中所有的DOM文档结构绘制完毕后立刻执行。不用等 与DOM元素关联的内容，图片等资源加载完
+编写个数：
+ 前者：同一个页面不能同时出现
+ 后者：同一个页面能同时编写多个
+ 简化形式：
+  前者：没有简化形式
+  后者：$(function(){})
+ 3.DOM对象：直接使用JS获取的节点对象，使用js的方法，不能使用jq的方法
+  jquery对象：使用了$()包装了DOM对象的对象，能够使用jq的方法，不能使用js的方法
+  
+ 4.方法：设置样式
+   css("属性"，"属性值")
+   addClass("类名") ，在style里面 .类名{ 设置类样式}
+   next() 相邻的后面某元素
+  5.DOM对象和jq对象的转换
+  dom对象转jq对象：$对象名=$(dom对象名);
+  jq对象转dom对象：$对象名[下标]或者$对象名.get(下标)
+  
+ 6.选择器
+1.基本选择器：  $("#id")   $(".class")   $("tagname") 
+             组合： $("aa,bb,cc")  $(p.title)
+2. 层次选择器：
+        后代：  $("#id span")
+     子元素 ： $("#id>span") 
+     下一个相邻元素： $("#id+span")   
+     兄弟元素：$("#id~span")
+3.过滤选择器
+  $("aa:first") $("aa:last")  $("aa:even") $("aa:odd") $("aa:eq(4)") $("aa:gt(4)") $("lt(4)") $(not(#id/.class/.))
+4.内容过滤选择器
+ :contains('text')--包含text文本
+ :empty --不包含子元素或文本的空元素
+ :has(selector)--含有选择器所匹配的元素
+ :parent 含有子元素或文本
+ 5.可见性过滤选择器
+ :hidden  所有不可见或type为hidden
+ :visible  所有可见
+ 6.属性过滤选择器：
+  [id] --所有包含id的 
+  [id='123']
+  [id!='123']
+  [id^='123']
+  [id$='123']
+  [id*='123']
+ 7.状态过滤器
+ input:enabled   input:disabled       input:checked         option:selected
+8.表单选择器
+:input   
+:text
+:password
+:radio
+:checkbox
+:submit
+:reset
+:button
+:file
+
+7.jq的事件
+在网页中的事件也是实现和用户交互的基础
+jq事件是对js事件的封装，常用事件分类：
+基础事件：
+ window事件：
+ 鼠标事件：
+   单击鼠标时click() --选项卡切换 
+   鼠标移过时mouseover() --实现主导航特效  
+   鼠标移出时mouseout()
+ 键盘事件：
+  按下键盘时：keydown()
+    $(document).keydown(function (event) {
+       if (event.keyCode == "13") {
+          alert("确认要提交么？");
+       }
+   });
+
+  释放键盘时：keyup()
+  产生可打印字符时：keypress()
+  
+ 
+ 表单事件:
+   获得焦点 时 focus()
+   失去焦点 时 blur()
+ 复合事件：
+     鼠标光标悬停 hover() 
+       $("#myaccound").hover(
+       function(){$("#menu_1").css("display","block");},//表示光标移入时触发等同mouseover
+       function(){$("#menu_1").css("display","none");}//光标移出时触发等同mouseout
+       );
+
+     鼠标连续点击toggle()方法
+      $("body").toggle(
+      function(){},//第一次点击触发
+      function(){},//第二次点击触发
+      function(){},//第三次点击触发
+      )
+ 
+ 绑定多个事件的方法：
+ ------- bind()---
+  $("input[name=event_1]").bind({
+  mouseover: function () {$("ul").css("display", "none");},
+   mouseout: function () {$("ul").css("display", "block");}
+});
+
+ 移除事件使用unbind()  
+  unbind([type],[fn])   
+  [type]事件类型包括:blur focus click mouseout等基础事件，还有自定义事件
+  [fn]：处理函数，用来绑定的处理函数
+   unbind() 不带参数，表示移除所绑定的全部事件
+   
+  jQ的动画效果：
+  
+  1. 控制的元素的显示与隐藏
+    --show()  $(".tipsbox").show("slow") 参数：毫秒1000，slow，normal，fast
+    -- hide()
+    --toggle()切换元素的可见状态   $("li:gt(5):not(:last)").toggle();
+
+  2.控制元素的淡入淡出： 通过改变元素的透明度实现此种效果
+  	--fadeIn()  参数：毫秒1000，slow，normal，fast
+ 	--fadeOut()
+  3.改变元素的高度:  使元素逐步延伸显示或者缩短至隐藏 参数：毫秒1000，slow，normal，fast
+   --slideDown()
+   --slideUp()
+  
+ 
+  DOM操作分三类：js对这三类都支持
+ 一  HTML-DOM：用于处理HTML文档，如document.forms
+ 二 CSS-DOM：用于操作css如，eleent.style.color="gray"
+ 三 DOM Core：任何一种DOM的编程语言都可以使用它，属于标准的DOM标准和属性。即是w3c制定的标准（js支持，PHP也支持）
+     常见的core Dom方法：  
+     1、创建节点	createElement()    createTextNode()
+	 2、复制节点cloneNode()
+	 3、插入节点appendChild() insertBefore()
+	 4、删除节点removeChild()
+	 5、替换节点replaceChild()
+	 6、查找和设置节点属性setAttribute() getAttribute()
+     7、查找节点getElementById() getElementsByTagName() hasChildNode()
+     常见的core Dom属性：
+    node.childNodes   node.firstChild  node.lastChild   
+    node.nextSibling  node.previousSibling node.parentNode
+  
+ 使用jq操作DOM
+ 
+  1.操作css样式
+    方式一：css()
+    //设置单个样式   css(name,value)
+            书写：  $(this).css("border","5px solid #f5f5f5");
+    //通过对象形式设置多个样式   css({name:value, name:value,name:value…})
+            书写：  $(this).css({"border":"5px solid #f5f5f5","opacity":"0.5"});
+    方式二：在style中编写.class，通过addClass()  
+      追加样式：    addClass(class)  addClass(class1 class2 … classN)
+      移除样式    removeClass(“style2 ”)或removeClass("style1 style2 ")
+     切换样式：toggleClass(class) 模拟addClass()与removeClass()的切换过程
+  2.操作文本与Value属性值内容  html()  text() val()
+     获取元素中的HTML代码/文本内容  $("div.left").html();
+     设置元素中的HTML代码/文本内容  $("div.left").html("<div class='content'>…</div>");
+     获取元素中的文本内容 $("div.left").text();
+     设置元素中的文本内容   $("div.left").text("<div class='content'>…</div>");
+   获取元素的value属性值$(this).val();
+   设置元素的value属性值$(this).val("xxx");
+  3.操作DOM节点
+      查找节点：
+        创建节点：
+        $(selector) 通过选择器查找获取节点
+        $(element)把DOM节点转化成jQuery节点
+        $(html)：使用HTML字符串创建jQuery节点
+                  创建含文本与属性<li>元素节点
+              var $newNode2=$(“<li title=‘标题为千与千寻’>千与千寻</li>”);
+
+      插入节点：
+       1.元素内部插入子节点
+      append(content)/appendTo(content)---
+      $(A).append(B)表示将B追加到A中  $("ul").append($newNode1);
+      $(A).appendTo(B)表示把A追加到B中$newNode1.appendTo("ul");
+      prepend(content)/prependTo(content)---
+      $(A). prepend (B)表示将B前置插入到A中 $("ul"). prepend ($newNode1);
+      $(A). prependTo (B)表示将A前置插入到B中$newNode1. prependTo ("ul");
+       2.插入同辈节点
+         after(content)/insertAfter(content)
+         $(A).after (B)表示将B插入到A之后 $("ul").after($newNode1);
+         $(A). insertAfter (B)表示将A插入到B之后$newNode1.insertAfter("ul");
+         before(content)/insertBefore(content)
+         $(A). before (B)表示将B插入至A之前 $("ul").before($newNode1);
+         $(A). insertBefore (B)表示将A插入到B之前$newNode1.insertBefore("ul");
+
+      替换节点：：replaceWith()和replaceAll()
+       $("ul li:eq(1)").replaceWith($newNode1);
+            或$newNode1.replaceAll("ul li:eq(1)");
+      删除节点：
+      remove():删除整个节点
+      detach():删除整个节点，保留元素的绑定事件，附加的数据
+      empty()：清空节点内容
+      复制节点：
+      clone()用于复制某个节点$("ul li:eq(1)").clone(true).appendTo("ul");
+               参数true表示复制事件处理
+      clone()实现输出DOM元素本身的HTML$("<div></div>").append($(DOM元素).clone()).html();
+
+  4.操作节点属性
+     attr()  
+     $newNode4.attr("alt"); 获取alt属性值
+     $("img").attr({width:"50",height:"100"}); 设置width、height属性的值
+     removeAttr()
+      $newNode2.removeAttr("title");删除元素的title属性
+
+  5.遍历DOM节点
+      遍历子元素  children()获取元素的所有子元素   $("body").children();获取<body>元素的子元素，但不包含子元素的子元素
+      遍历同辈元素：
+  next([expr])用于获取紧邻匹配元素之后的元素，$("li:eq(1)").next().css("background-color","#F06");
+  prev([expr])用于获取紧邻匹配元素之前的元素，$("li:eq(1)").prev().css("background-color","#F06");
+  siblings([expr]用于获取位于匹配元素前面和后面的所有同辈元素，$("li:eq(1)").siblings().css("background-color","#F06");
+      遍历前辈元素
+       parent()：获取元素的父级元素
+       parents()：获取元素的祖先元素
+       
+      其他节点操作方法：each()、find()、filter()等节点操作
+
+
+      
+  6.操作css-DOM
+    height([value])设置或返回匹配元素的高度
+    width([value])设置或返回匹配元素的宽度 
+    offset([value])返回以像素为单位的top和left坐标。此方法仅对可见元素有效
+
+
