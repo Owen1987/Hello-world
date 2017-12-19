@@ -1,0 +1,183 @@
+一：两列布局
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>两列布局，左侧定宽，右侧自适应</title>
+		<style type="text/css">
+	/*1.利用弹性盒子，仅支持IE11+*/
+	        body{margin: 0;padding:0;}
+			.main{display:flex;height: 900px;}
+			.left{flex:0  0 100px;order:-1; -webkit-order: -1;border: #0D92F1 1px solid;}
+			.right{flex:1;background:#008000;}
+	/*2.利用posion：absolute
+			body{margin: 0;padding: 0;}
+			.left{width:100px;background: #0D92F1;height:300px;}
+			.right{position:absolute;left:100px;right:0;top:0;background:#008000;height:300px;}
+		*/
+	/*3利用浮动+外边距
+	       body{margin: 0;padding: 0;}
+		  .left{float:left;width:100px;background: #0D92F1;}
+		  .right{margin-left: 100px;background:#008000;}
+		  */
+		</style>
+	</head>
+	<body>
+		<!--1.利用弹性盒子，但只支持IE11+-->
+		<div class="main">
+			<div class="left">
+				左侧定宽100px
+			</div>
+			<div class="right">
+				右侧自适应
+			</div>
+		</div>
+		
+		<!--方式2，利用posion：absolute  方式3，利用浮动+外边距-->
+		<!--<div class="left">
+				左侧定宽100px
+			</div>
+			
+		 <div class="right">
+				右侧自适应
+		</div>
+		 -->
+			
+	</body>
+</html>
+
+二：三列布局（两边定宽，中间不定宽）
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>左右定宽，中间自适应：1.使用外边距
+    	优点：兼容IE7+，考虑到页面优化，中间内容区先加载
+
+        缺点：多一层div嵌套，不易理解</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .main,.left,.right{
+            height: 300px;
+            font: 20px/300px;
+            color: #fff;
+            text-align: center;
+        }
+        .main{
+            width: 100%;
+            float: left;
+        }
+        .main .content{
+            margin: 0 300px 0 200px;
+            background-color: black;
+        }
+        .left{
+            width: 200px;
+            float: left;
+            margin-left: -100%;
+            background-color: red;
+        }
+        .right{
+            width: 300px;
+            float: left;
+            margin-left: -300px;
+            background-color: blue;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <div class="content">中间主体区域宽度自适应</div>
+    </div>
+    <div class="left">左侧定宽200px</div>
+    <div class="right">右侧定宽300px</div>
+</body>
+</html>-->
+	
+	
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>2.使用position+margin</title>
+<style>
+body{
+    margin:0px;
+}
+
+#left{
+	position:absolute;
+	top:0px;
+	left:0px;
+	width: 200px;
+	height:400px;
+	background-color: royalblue;
+}
+#center{
+	
+	border: 1px solid #F9B3D5;
+	background-color: red;
+	margin-left:200px;
+	margin-right:200px;
+	height:400px;
+}
+#right{
+	position:absolute;
+	top:0px;
+	right:0px;
+	width: 200px;
+	height:400px;
+	background-color: greenyellow;
+	
+}
+
+</style>
+</head>
+
+<body>
+    <div id="center">中列</div>
+    <div id="left">左列</div>
+    <div id="right">右列</div>
+</body>
+</html>-->
+	
+	
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>3.使用flex布局</title>
+		<style> 
+		.HolyGrail-body {
+		  display: flex;
+		  flex: 1;
+		}
+		.HolyGrail-content {
+		  flex: 1;
+		  background-color: green;
+		}
+		
+		.HolyGrail-nav, .HolyGrail-ads {
+		  /* 两个边栏的宽度设为12em */
+		  flex: 0 0 200px;
+		  background-color: blue;
+		}
+		
+		.HolyGrail-nav {
+		  /* 导航放到最左边 */
+		  order: -1;
+		  background-color: grey;
+		}
+		</style>
+		</head>
+		<body>
+		  <div class="HolyGrail-body">
+		    <main class="HolyGrail-content">...</main>
+		    <nav class="HolyGrail-nav">...</nav>
+		    <aside class="HolyGrail-ads">...</aside>
+		  </div>
+		</body>
+</html>
