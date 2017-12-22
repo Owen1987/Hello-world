@@ -685,14 +685,213 @@ set.size // 56
 // 去除数组的重复成员（注意有这个[]才是数组）
 [...new Set(array)]
 
+//let set= new Set(["a","b","c","d","e","f"])
+for(let item of set.keys()){console.log(item);}
+keys()：返回键名的遍历器
+values()：返回键值的遍历器
+entries()：返回键值对的遍历器
+forEach()：使用回调函数遍历每个成员
 
+ Map：
+   ES6 提供了 Map 数据结构。它类似于对象，也是键值对的集合，但是“键”的范围不限于字符串，各种类型的值（包括对象）都可以当作键。
+ 也就是说，Object 结构提供了“字符串—值”的对应，Map 结构提供了“值—值”的对应，是一种更完善的 Hash 结构实现。
+ 如果你需要“键值对”的数据结构，Map 比 Object 更合适。
+ 
+const m = new Map();
+const o = {p: 'Hello World'};
+m.set(o, 'content')  m.get(o) // "content"   m.has(o) // true  m.delete(o) // true  m.has(o) // false
+ 
+ 接受数组作为参数
+ const map = new Map([
+  ['name', '张三'],
+  ['title', 'Author']
+]);
+map.size // 2
+map.has('name') // true
+map.get('name') // "张三"
+map.has('title') // true
+map.get('title') // "Author"
+
+不仅仅是数组，任何具有Iterator接口且每个成员都是一个双元素的数据结构，都可以当做是Mapjiegou 
+ const set = new Set([
+  ['foo', 1],
+  ['bar', 2]
+]);
+const m1 = new Map(set);
+m1.get('foo') // 1
+const m2 = new Map([['baz', 3]]);
+const m3 = new Map(m2);
+m3.get('baz') // 3
+
+对同一个对象的引用，Map结构才将其视为同一个键
+const map = new Map();
+const k1 = ['a']; //都是['a'] 但被两个不同的对象引用，就指向不同的内存地址
+const k2 = ['a'];  //  所以是 两个不同键
+map.set(k1, 111).set(k2, 222);
+map.get(k1) // 111
+map.get(k2) // 222
+
+注意：['a']的内存地址不一样
+const map = new Map();
+map.set(['a'], 555);
+map.get(['a']) // undefined
+
+
+如果 Map 的键是一个简单类型的值（数字、字符串、布尔值），则只要两个值严格相等，Map 将其视为一个键，比如0和-0就是一个键，布尔值true和字符串true则是两个不同的键。另外，undefined和null也是两个不同的键。虽然NaN不严格相等于自身，但 Map 将其视为同一个键。
+let map = new Map();
+map.set(-0, 123);
+map.get(+0) // 123
+map.set(true, 1);
+map.set('true', 2);
+map.get(true) // 1
+map.set(undefined, 3);
+map.set(null, 4);
+map.get(undefined) // 3
+map.set(NaN, 123);
+map.get(NaN) // 123
 
 十一、Proxy
+Proxy 用于修改某些操作的默认行为，等同于在语言层面做出修改，所以属于一种“元编程”（meta programming），即对编程语言进行编程。
+ES6 原生提供 Proxy 构造函数，用来生成 Proxy 实例。
+var proxy = new Proxy(target, handler);//new Proxy()表示生成一个Proxy实例，target参数表示所要拦截的目标对象，handler参数也是一个对象，用来定制拦截行为。
+
+如果handler没有设置任何拦截，那就等同于直接通向原对象。
+var target = {};
+var handler = {};
+var proxy = new Proxy(target, handler);
+proxy.a = 'b';
+target.a // "b"
+上面代码中，handler是一个空对象，没有任何拦截效果，访问proxy就等同于访问target。
+
+
+var obj = new Proxy({}, {     //对空对象进行了拦截，重定义了属性的读取（get）和设置（set）行为。
+  get: function (target, key, receiver) {
+    console.log(`getting ${key}!`);
+    return Reflect.get(target, key, receiver);
+  },
+  set: function (target, key, value, receiver) {
+    console.log(`setting ${key}!`);
+    return Reflect.set(target, key, value, receiver);
+  }
+});
+结果：
+obj.count = 1
+//  setting count!
+++obj.count
+//  getting count!
+//  setting count!
+//  2
+
+var person = {
+  name: "张三"
+};
+var proxy = new Proxy(person, {//拦截目标对象 person 
+  get: function(target, property) {
+    if (property in target) {
+      return target[property];
+    } else {
+      throw new ReferenceError("Property \"" + property + "\" does not exist.");
+    }
+  }
+});
+proxy.name // "张三"
+proxy.age // 抛出一个错误
+
+Proxy的实例方法：
+ get() set() apply() has() construct() deleteProperty() defineProperty() getOwnPropertyDescriptor() getPrototypeOf()
+ isExtensible()  ownKeys() preventExtensions() preventExtensions() Proxy.revocable()
+ 
+ 
 十二、Reflect
+
+ Reflect对象一共有 13 个静态方法。
+
+Reflect.apply(target, thisArg, args)
+Reflect.construct(target, args)
+Reflect.get(target, name, receiver)
+Reflect.set(target, name, value, receiver)
+Reflect.defineProperty(target, name, desc)
+Reflect.deleteProperty(target, name)
+Reflect.has(target, name)
+Reflect.ownKeys(target)
+Reflect.isExtensible(target)
+Reflect.preventExtensions(target)
+Reflect.getOwnPropertyDescriptor(target, name)
+Reflect.getPrototypeOf(target)
+Reflect.setPrototypeOf(target, prototype)
+
 十三、Promise对象
+Promise 是异步编程的一种解决方案，比传统的解决方案——回调函数和事件——更合理和更强大。它由社区最早提出和实现，ES6 将其写进了语言标准，统一了用法，原生提供了Promise对象。
+所谓Promise，简单说就是一个容器，里面保存着某个未来才会结束的事件（通常是一个异步操作）的结果。从语法上说，Promise 是一个对象，从它可以获取异步操作的消息
+Promise两个特点：
+  1.象的状态不受外界影响,Promise对象代表一个异步操作，有三种状态：pending（进行中）、fulfilled（已成功）和rejected（已失败）。
+  2.一旦状态改变，就不会再变，任何时候都可以得到这个结果。Promise对象的状态改变，只有两种可能：从pending变为fulfilled和从pending变为rejected。
+
 十四、Iterator和for...of循环
+JavaScript 原有的表示“集合”的数据结构，主要是数组（Array）和对象（Object），ES6 又添加了Map和Set。
+遍历器（Iterator）就是这样一种机制。它是一种接口，为各种不同的数据结构提供统一的访问机制
+Iterator 的作用有三个：一是为各种数据结构，提供一个统一的、简便的访问接口；二是使得数据结构的成员能够按某种次序排列；三是 ES6 创造了一种新的遍历命令for...of循环，Iterator 接口主要供for...of消费。
+ let arr = ['a', 'b', 'c'];
+let iter = arr[Symbol.iterator]();
+iter.next() // { value: 'a', done: false }
+iter.next() // { value: 'b', done: false }
+iter.next() // { value: 'c', done: false }
+iter.next() // { value: undefined, done: true }
+ 
+ 
+for...in :只获得的键名   
+ for...of ：允许遍历获得键值，数组的遍历器接口只返回具有数字索引的属性
+var arr = ['a', 'b', 'c', 'd'];
+for (let a in arr) {  
+  console.log(a); // 0 1 2 3
+}
+for (let a of arr) {
+  console.log(a); // a b c d
+}
+
+
+let arr = [3, 5, 7];
+arr.foo = 'hello';
+
+for (let i in arr) {
+  console.log(i); // "0", "1", "2", "foo"
+}
+
+for (let i of arr) {
+  console.log(i); //  "3", "5", "7"
+}
+
+
 十五、Generator函数的语法
+Generator 函数是 ES6 提供的一种异步编程解决方案
+执行 Generator 函数会返回一个遍历器对象，也就是说，Generator 函数除了状态机，还是一个遍历器对象生成函数。返回的遍历器对象，可以依次遍历 Generator 函数内部的每一个状态。
+特征：
+一是，function关键字与函数名之间有一个星号；二是，函数体内部使用yield表达式，定义不同的内部状态（yield在英语里的意思就是“产出”）。
+function* helloWorldGenerator() {
+  yield 'hello';
+  yield 'world';
+  return 'ending';
+}
+var hw = helloWorldGenerator();
+hw.next() //{ value: 'hello', done: false }
+hw.next()// { value: 'world', done: false }
+hw.next()// { value: 'ending', done: true }
+hw.next()// { value: undefined, done: true 
+
+
 十六、Generator函数的异步运用
+Javascript 语言的执行环境是“单线程”的，ES6 诞生以前，异步编程的方法，大概有下面四种。
+   回调函数
+   事件监听
+   发布/订阅
+   Promise 对象
+ 回调函数---读取文件进行处理
+  fs.readFile('/etc/passwd', 'utf-8', function (err, data) {
+  if (err) throw err;
+  console.log(data);
+});
+
+
 十七、async函数
 十八、Class的基本用法
 十九、Class的继承
