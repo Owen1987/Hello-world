@@ -879,25 +879,282 @@ hw.next()// { value: 'ending', done: true }
 hw.next()// { value: undefined, done: true 
 
 
-十六、Generator函数的异步运用
+十六、Generator函数的异步运用（Generator函数  Thunk函数  co模块）
 Javascript 语言的执行环境是“单线程”的，ES6 诞生以前，异步编程的方法，大概有下面四种。
    回调函数
    事件监听
    发布/订阅
    Promise 对象
- 回调函数---读取文件进行处理
+ 一.回调函数---读取文件进行处理
   fs.readFile('/etc/passwd', 'utf-8', function (err, data) {
   if (err) throw err;
   console.log(data);
 });
 
+ 回调函数嵌套：多重嵌套，多个异步操作形成强耦合，只要有一处修改，它的上层和下层函数可能都要跟着修改 形成“回调函数地狱”callback hell
+ fs.readFile(fileA, 'utf-8', function (err, data) {
+  fs.readFile(fileB, 'utf-8', function (err, data) {
+    // ...
+  });
+});
+二.解决：利用Promise对象 (ES6) ，改进回调函数，但是.then代码多，冗余
+ 它不是新的语法功能，而是一种新的写法，允许将回调函数的嵌套，改成链式调用。采用 Promise，连续读取多个文件，写法如下。
+ var readFile = require('fs-readfile-promise'); //使用fs-readfile-promise模块，它的作用就是返回一个 Promise 版本的readFile函数
+
+readFile(fileA)
+.then(function (data) {
+  console.log(data.toString());
+})
+.then(function () {
+  return readFile(fileB);
+})
+.then(function (data) {
+  console.log(data.toString());
+})
+.catch(function (err) {
+  console.log(err);
+});
+协程：其中有一种叫做"协程"（coroutine），意思是多个线程互相协作，完成异步任务。
+协程有点像函数，又有点像线程。它的运行流程大致如下。
+第一步，协程A开始执行。
+第二步，协程A执行到一半，进入暂停，执行权转移到协程B。
+第三步，（一段时间后）协程B交还执行权。
+第四步，协程A恢复执行。
+
+三. Generator函数：由于Fetch模块返回的是一个 Promise 对象，因此要用then方法调用下一个next方法
+var fetch = require('node-fetch');
+function* gen(){ //Generator 函数封装了一个异步操作，该操作先读取一个远程接口，然后从 JSON 格式的数据解析信息
+  var url = 'https://api.github.com/users/github';
+  var result = yield fetch(url);
+  console.log(result.bio);
+}
+var g = gen();
+var result = g.next();
+result.value.then(function(data){
+  return data.json();
+}).then(function(data){
+  g.next(data);
+});
+虽然 Generator 函数将异步操作表示得很简洁，但是流程管理却不方便（即何时执行第一阶段、何时执行第二阶段）。
+四.Thunk函数：Thunk 函数是自动执行 Generator 函数的一种方法。
+function f(m) {
+  return m * 2;
+}
+f(x + 5); //这个是“传值调用”
+// 等同于
+var thunk = function () {//临时函数（传入函数体），即Thunk函数
+  return x + 5;
+};
+function f(thunk) { //临时函数传入函数体，叫做“传名调用”
+  return thunk() * 2;
+}
+
+JavaScript 语言是传值调用，它的 Thunk 函数含义有所不同。在 JavaScript 语言中，
+Thunk 函数替换的不是表达式，而是多参数函数，将其替换成一个只接受回调函数作为参数的单参数函数。
+
+// 正常版本的readFile（多参数版本）
+fs.readFile(fileName, callback);
+
+// Thunk版本的readFile（单参数版本）
+var Thunk = function (fileName) { //这个单参数版本就叫做Thunk函数
+  return function (callback) {
+    return fs.readFile(fileName, callback);
+  };
+};
+var readFileThunk = Thunk(fileName);
+readFileThunk(callback);
+
+任何函数，只要参数有回调函数，就能写成 Thunk 函数的形式。下面是一个简单的 Thunk 函数转换器。
+
+// ES5版本
+var Thunk = function(fn){
+  return function (){
+    var args = Array.prototype.slice.call(arguments);
+    return function (callback){
+      args.push(callback);
+      return fn.apply(this, args);
+    }
+  };
+};
+
+// ES6版本
+const Thunk = function(fn) {
+  return function (...args) {
+    return function (callback) {
+      return fn.call(this, ...args, callback);
+    }
+  };
+};
+使用上面的转换器，生成fs.readFile的 Thunk 函数。
+var readFileThunk = Thunk(fs.readFile);
+readFileThunk(fileA)(callback);
+
+重点例子：
+function f(a, cb) {
+  cb(a);
+}
+const ft = Thunk(f);
+
+ft(1)(console.log) // 1
+
 
 十七、async函数
+async 函数是什么？一句话，它就是 Generator 函数的语法糖。使得异步变得更加方便
+前文有一个 Generator 函数，依次读取两个文件。
+
+const fs = require('fs');
+
+const readFile = function (fileName) {
+  return new Promise(function (resolve, reject) {
+    fs.readFile(fileName, function(error, data) {
+      if (error) return reject(error);
+      resolve(data);
+    });
+  });
+};
+
+const gen = function* () {
+  const f1 = yield readFile('/etc/fstab');
+  const f2 = yield readFile('/etc/shells');
+  console.log(f1.toString());
+  console.log(f2.toString());
+};
+写成async函数，就是下面这样。
+
+const asyncReadFile = async function () {
+  const f1 = await readFile('/etc/fstab');
+  const f2 = await readFile('/etc/shells');
+  console.log(f1.toString());
+  console.log(f2.toString());
+};
 十八、Class的基本用法
+  传统方法，通过构造函数生成实例对象
+  function Point(x, y) {
+  this.x = x;
+  this.y = y;
+}
+Point.prototype.toString = function () {
+  return '(' + this.x + ', ' + this.y + ')';
+};
+var p = new Point(1, 2);
+ES6：
+//定义类
+class Point {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+  toString() {
+    return '(' + this.x + ', ' + this.y + ')';
+  }
+}
+
 十九、Class的继承
+class Point {
+}
+class ColorPoint extends Point { //通过extends 关键字实现继承
+}// 等同于
+class ColorPoint extends Point {
+  constructor(...args) {
+    super(...args);
+  }
+}
+
+例子：
+class Point {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
+class ColorPoint extends Point {
+  constructor(x, y, color) {
+    this.color = color; // ReferenceError（错误）
+    super(x, y);
+    this.color = color; // 正确。this在super之后有效
+  }
+}
+let cp = new ColorPoint(25, 8, 'green');
+cp instanceof ColorPoint // true
+cp instanceof Point // true
+
+父类的静态方法，也会被子类继承。
+class A {
+  static hello() {
+    console.log('hello world');
+  }
+}
+class B extends A {
+}
+B.hello()  // hello world
+
 二十、Decorator
+ 修饰器（Decorator）函数：包括类的修饰和方法的修饰
+ 
 二十一、Module的语法
+  export import   export default  模块的继承 夸模块常量
+  ES6 模块的设计思想，是尽量的静态化，使得编译时就能确定模块的依赖关系，以及输入和输出的变量。
+  CommonJS 和 AMD 模块，都只能在运行时确定这些东西。比如，CommonJS 模块就是对象，输入时必须查找对象属性。
+// CommonJS模块
+let { stat, exists, readFile } = require('fs');//运行时加载
+// 等同于
+let _fs = require('fs');
+let stat = _fs.stat;
+let exists = _fs.exists;
+let readfile = _fs.readfile;
+
+// ES6模块
+import { stat, exists, readFile } from 'fs'; //编译时加载或者静态加载
+export的写法：
+// profile.js
+var firstName = 'Michael';
+var lastName = 'Jackson';
+var year = 1958;
+export {firstName, lastName, year};//export输出3个变量
+
+export function multiply(x, y) { //export也可以输出函数 或者 类
+  return x * y;
+};
+//通过as取别名 
+function v1() { ... }
+function v2() { ... }
+export {
+  v1 as streamV1,
+  v2 as streamV2,
+  v2 as streamLatestVersion
+};
+
+// 写法一
+export var m = 1;
+// 写法二
+var m = 1;
+export {m};
+// 写法三
+var n = 1;
+export {n as m};
+export语句输出的接口，与其对应的值是动态绑定关系，即通过该接口，可以取到模块内部实时的值。
+export var foo = 'bar';
+setTimeout(() => foo = 'baz', 500); //输出变量foo，值为bar，500 毫秒之后变成baz。
+
+
+// circle.js
+
+export function area(radius) {
+  return Math.PI * radius * radius;
+}
+
+export function circumference(radius) {
+  return 2 * Math.PI * radius;
+}
+现在，加载这个模块。
+// main.js
+import { area, circumference } from './circle';
+import * as circle from './circle';//整体加载法
+console.log('圆面积：' + area(4));
+console.log('圆周长：' + circumference(14));
 二十二、Module的加载实现
+
 二十三、编程风格
 二十四、读懂规格
 二十五、ArrayBuffer
