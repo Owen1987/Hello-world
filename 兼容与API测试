@@ -1,0 +1,35 @@
+1.API测试数据
+   谷歌浏览器 有内置的 DHC，  postman也是一款很不错的API测试工具
+   包括：
+       1.请求构造
+            请求参数，请求头 请求方法
+             响应查看 格式化
+       2.请求管理
+          保存 命名空间管理（项目 服务）
+       3高阶用法
+          请求复制
+          数据导入导出
+2.浏览器兼容3部区
+   1如何发现问题？
+      QuirksMode：兼容性列表
+      CanIUse：查询js特性，css属性，html5等的支持情况（推荐）
+          CanIUse.com
+   2 如何解决问题：
+      1  BrowserHacks:不同浏览器及版本支持的各种黑科技
+          BrowserHacks.com
+      2  Shim：补充老旧浏览器的不足，让代码更顺手
+           ES5Shim  
+           ES6Shim  
+           HTML5Shim
+           JSONShim
+    
+   3 如何把事做绝：
+        渐进增强，工具：Modernizr（推荐）  Feature.js
+            Modernizr：现代浏览器特征检测，助你渐进增强
+            Feature.js：类似 Modernizr比较轻量，不支持css
+         基于Modernizr做渐进增强（增强老旧浏览器的功能）
+          全局安装：Modernizr
+          获取配置：自定义构建
+          生成构建：命令行用法
+          引入脚本：直接页面引用
+          使用方法：JS+CSS
