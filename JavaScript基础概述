@@ -1,0 +1,192 @@
+参考JavaScript参考手册 http://www.runoob.com/jsref/dom-obj-document.html
+
+----JavaScript内置对象：
+   ----Array   Boolean   Number String   Date  Math  RegExp  Error 
+   ----全局属性/函数：JavaScript 全局属性和方法可用于创建Javascript对象
+   ----JavaScript运算符：运算符用于赋值，比较值，执行算术运算等   
+      明细： 
+       全局属性： Infinity（正无穷）   NaN   undefined
+       全局函数：
+                  函数	                  描述
+              decodeURI()	             解码某个编码的 URI。
+              decodeURIComponent()	    解码一个编码的 URI 组件。
+              encodeURI()	              把字符串编码为 URI。
+              encodeURIComponent()	    把字符串编码为 URI 组件。
+              escape()	                对字符串进行编码。
+              eval()	                  计算 JavaScript 字符串，并把它作为脚本代码来执行。
+              isFinite()	              检查某个值是否为有穷大的数。
+              isNaN()	                  检查某个值是否是数字。
+              Number()	                把对象的值转换为数字。
+              parseFloat()	            解析一个字符串并返回一个浮点数。
+              parseInt()	              解析一个字符串并返回一个整数。
+              String()	                把对象的值转换为字符串。
+              unescape()	              对由 escape() 编码的字符串进行解码。
+       JavaScript运算符：
+              算术运算符  + - * / %  ++  --
+              赋值运算符  =  +=  -=  *=   /=  %=
+              字符串运算符 +  +=
+              比较运算符  ==  ===  !=  !==  > <  >=  <=
+              条件运算符  &&  ||  !
+              位运算符   &  |   ~   ^   <<   >>
+       Error 对象
+              Error 对象在错误发生时提供了错误的提示信息。
+              Error属性：name message
+                  try {
+                      adddlert("Welcome");
+                  }
+                  catch(err) {
+                      document.getElementById("demo").innerHTML = 
+                      err.name + "<br>" + err.message;
+                  }
+--------Browser对象
+     ---Window  对象表示浏览器中打开的窗口。如果文档包含框架（<frame> 或 <iframe> 标签），浏览器会为 HTML 文档创建一个 window 对象，并为每个框架创建一个额外的 window 对象。 
+     ---Navigator  对象包含有关浏览器的信息。 
+     ---Screen  对象包含有关客户端显示屏幕的信息。
+     ---History  对象包含用户（在浏览器窗口中）访问过的 URL，是 window 对象的一部分，可通过 window.history 属性对其进行访问
+     ---Location  有关当前 URL 的信息。是 window 对象的一部分，可通过 window.Location 属性对其进行访问。
+     ---存储对象  Web 存储 API 提供了 sessionStorage （会话存储） 和 localStorage（本地存储）两个存储对象来对网页的数据进行添加、删除、修改、查询操作。
+         localStorage 用于长久保存整个网站的数据，保存的数据没有过期时间，直到手动去除
+         sessionStorage 用于临时保存同一窗口(或标签页)的数据，在关闭窗口或标签页之后将会删除这些数据。。
+     明细：
+     Window 对象属性
+                        属性	                 描述
+                        closed	返回窗口是否已被关闭。
+                        defaultStatus	设置或返回窗口状态栏中的默认文本。
+                        document	对 Document 对象的只读引用。(请参阅对象)
+                        frames	返回窗口中所有命名的框架。该集合是 Window 对象的数组，每个 Window 对象在窗口中含有一个框架。
+                        history	对 History 对象的只读引用。请参数 History 对象。
+                        innerHeight	返回窗口的文档显示区的高度。
+                        innerWidth	返回窗口的文档显示区的宽度。
+                        localStorage	在浏览器中存储 key/value 对。没有过期时间。
+                        length	设置或返回窗口中的框架数量。
+                        location	用于窗口或框架的 Location 对象。请参阅 Location 对象。
+                        name	设置或返回窗口的名称。
+                        navigator	对 Navigator 对象的只读引用。请参数 Navigator 对象。
+                        opener	返回对创建此窗口的窗口的引用。
+                        outerHeight	返回窗口的外部高度，包含工具条与滚动条。
+                        outerWidth	返回窗口的外部宽度，包含工具条与滚动条。
+                        pageXOffset	设置或返回当前页面相对于窗口显示区左上角的 X 位置。
+                        pageYOffset	设置或返回当前页面相对于窗口显示区左上角的 Y 位置。
+                        parent	返回父窗口。
+                        screen	对 Screen 对象的只读引用。请参数 Screen 对象。
+                        screenLeft	返回相对于屏幕窗口的x坐标
+                        screenTop	返回相对于屏幕窗口的y坐标
+                        screenX	返回相对于屏幕窗口的x坐标
+                        sessionStorage	在浏览器中存储 key/value 对。 在关闭窗口或标签页之后将会删除这些数据。
+                        screenY	返回相对于屏幕窗口的y坐标
+                        self	返回对当前窗口的引用。等价于 Window 属性。
+                        status	设置窗口状态栏的文本。
+                        top	返回最顶层的父窗口。
+                        Window 对象方法
+             window对象方法
+                        方法	描述
+                        alert()	显示带有一段消息和一个确认按钮的警告框。
+                        atob()	解码一个 base-64 编码的字符串。
+                        btoa()	创建一个 base-64 编码的字符串。
+                        blur()	把键盘焦点从顶层窗口移开。
+                        clearInterval()	取消由 setInterval() 设置的 timeout。
+                        clearTimeout()	取消由 setTimeout() 方法设置的 timeout。
+                        close()	关闭浏览器窗口。
+                        confirm()	显示带有一段消息以及确认按钮和取消按钮的对话框。
+                        createPopup()	创建一个 pop-up 窗口。
+                        focus()	把键盘焦点给予一个窗口。
+                        getSelection()	返回一个 Selection 对象，表示用户选择的文本范围或光标的当前位置。
+                        getComputedStyle()	获取指定元素的 CSS 样式。
+                        matchMedia()	该方法用来检查 media query 语句，它返回一个 MediaQueryList对象。
+                        moveBy()	可相对窗口的当前坐标把它移动指定的像素。
+                        moveTo()	把窗口的左上角移动到一个指定的坐标。
+                        open()	打开一个新的浏览器窗口或查找一个已命名的窗口。
+                        print()	打印当前窗口的内容。
+                        prompt()	显示可提示用户输入的对话框。
+                        resizeBy()	按照指定的像素调整窗口的大小。
+                        resizeTo()	把窗口的大小调整到指定的宽度和高度。
+                        scroll()	已废弃。 该方法已经使用了 scrollTo() 方法来替代。
+                        scrollBy()	按照指定的像素值来滚动内容。
+                        scrollTo()	把内容滚动到指定的坐标。
+                        setInterval()	按照指定的周期（以毫秒计）来调用函数或计算表达式。
+                        setTimeout()	在指定的毫秒数后调用函数或计算表达式。
+                        stop()	停止页面载入。
+              Navigator 对象属性
+                        属性	        说明
+                        appCodeName	返回浏览器的代码名
+                        appName	返回浏览器的名称
+                        appVersion	返回浏览器的平台和版本信息
+                        cookieEnabled	返回指明浏览器中是否启用 cookie 的布尔值
+                        platform	返回运行浏览器的操作系统平台
+                        userAgent	返回由客户机发送服务器的user-agent 头部的值
+                        Navigator 对象方法
+               Navigator 对象方法       
+                       方法	描述
+                        javaEnabled()	指定是否在浏览器中启用Java
+                        taintEnabled()	规定浏览器是否启用数据污点(data tainting)
+               Screen 对象属性
+                        属性	        说明
+                        availHeight	返回屏幕的高度（不包括Windows任务栏）
+                        availWidth	返回屏幕的宽度（不包括Windows任务栏）
+                        colorDepth	返回目标设备或缓冲器上的调色板的比特深度
+                        height	返回屏幕的总高度
+                        pixelDepth	返回屏幕的颜色分辨率（每象素的位数）
+                        width	返回屏幕的总宽度  
+                History 对象属性
+                        属性	    说明
+                        length	返回历史列表中的网址数
+                        History 对象方法
+                History 对象方法
+                        方法	说明
+                        back()	加载 history 列表中的前一个 URL
+                        forward()	加载 history 列表中的下一个 URL
+                        go()	加载 history 列表中的某个具体页面  
+               Location 对象属性
+                        属性	描述
+                        hash	返回一个URL的锚部分
+                        host	返回一个URL的主机名和端口
+                        hostname	返回URL的主机名
+                        href	返回完整的URL
+                        pathname	返回的URL路径名。
+                        port	返回一个URL服务器使用的端口号
+                        protocol	返回一个URL协议
+                        search	返回一个URL的查询部分
+                        Location 对象方法
+                Location 对象方法    
+                        方法	说明
+                        assign()	载入一个新的文档
+                        reload()	重新载入当前文档
+                        replace()	用新的文档替换当前文档
+                存储对象属性
+                        属性	描述
+                        length	返回存储对象中包含多少条数据。
+                存储对象方法
+                        方法	描述
+                        key(n)	返回存储对象中第 n 个键的名称
+                        getItem(keyname)	返回指定键的值
+                        setItem(keyname, value)	添加键和值，如果对应的值存在，则更新该键对应的值。
+                        removeItem(keyname)	移除键
+                        clear()	清除存储对象中所有的键        
+                 Web 存储 API
+                      属性	描述
+                      window.localStorage	在浏览器中存储 key/value 对。没有过期时间。
+                      window.sessionStorage	在浏览器中存储 key/value 对。 在关闭窗口或标签页之后将会删除这些数据。  
+                         // 存储
+                          localStorage.setItem("lastname", "Smith");
+                          // 检索
+                          document.getElementById("result").innerHTML = localStorage.getItem("lastname");
+---------DOM对象
+     ---Document
+                当浏览器载入 HTML 文档, 它就会成为 document 对象。
+                document 对象是HTML文档的根节点与所有其他节点（元素节点，文本节点，属性节点, 注释节点）。
+                Document 对象使我们可以从脚本中对 HTML 页面中的所有元素进行访问。
+                提示：Document 对象是 Window 对象的一部分，可通过 window.document 属性对其进行访问。
+     ---DOM元素对象
+     ---DOM属性对象
+     ---DOM事件对象
+     ---DOM Console对象
+     明细：
+        HTML DOM 节点：
+                        在 HTML DOM (Document Object Model) 中 , 每一个元素都是 节点:
+                        文档是一个文档。
+                        所有的HTML元素都是元素节点。
+                        所有 HTML 属性都是属性节点。
+                        文本插入到 HTML 元素是文本节点。are text nodes。
+ 
+注释是注释节点。
+----------HTML 对象（所有的标签）     
