@@ -1,4 +1,61 @@
-//js没有函数作用域 和 动态作用域；只有静态作用域（也就是闭包）
+alert(a);//1
+alert(b);//undfined
+alert(c);//报错
+alert(d);//报错
+var a=1;
+if(false){
+ var b=2;
+}else{
+c=3;
+}
+function f(){
+  var d=4;
+}
+//----js没有块作用域
+for(var i=0;i<3;i++){
+}
+alert(i);//3 表示js语言没有块作用
+
+//----js没有动态作用域
+  function f(){
+   alert(x); 
+  }
+  function f1(){
+  var x=5;
+  f();
+  }
+function f2(){
+  var x=6;
+  f();
+}
+f1();//报错，x is not defined ---说明js没有动态作用域
+f2();//报错，x is not defined 
+//---js没有函数作用域 和 动态作用域；只有静态作用域（也就是闭包）
+  var x=100;
+  function f(){
+  //var x=60; //如果不注释  结果输出60
+   alert(x); 
+  }
+  function f1(){
+  var x=5;
+  f();
+  }
+function f2(){
+  var x=6;
+  f();
+}
+f1();//100
+----分析静态作用域
+  function f(){//浏览器解析创建时 scope==window
+     //f()被调用时，创建自己的词法作用域 le{x=100} ->f.[[scope]]
+    var  x=1000;
+    function g(){//创建时 g.[[scope]]==f.le
+      //被调用运行时 le->g.[[scope]]
+    }
+    g();
+  }
+  f();
+  形成作用域链：le->g.[[scope]] ->f.le ->f.[[scope]]==window
 复习：创建函数的几种方法
   function f(){}
  var f=function(){}
