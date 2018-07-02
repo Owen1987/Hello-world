@@ -105,4 +105,65 @@ f1();
      f(12);
      alert(g());
      
-     
+     闭包使用的注意点：
+ 1.对捕获的变量只是个引用，不是复制
+ 2.父函数每调用一次，会产生不同的闭包
+ 3.循环中的问题
+<div id="1">1</div>
+<div id="2">2</div>
+<div id="3">3</div>
+<script type="text/javascript">
+---3.循环中的问题
+ 通过闭包解决循环问题
+var i;
+for( i=1;i<=3;i++){
+	var ele = document.getElementById(i);
+	ele.onclick=(function(id){
+			return function(){
+				alert(id);
+			}
+		})(i);
+}
+
+   for(var i=1;i<=3;i++){
+      var ele = document.getElementById(i);
+         ele.onclick=function(){
+           alert(i);//4 4 4
+           alert(this.id);//1  2   3通过this解决
+      }
+   }
+
+-----1.是对变量的引用，而不是复制
+ function f(){
+ 	var num = 1;
+
+ 	function g(){
+ 		alert(num); //输出2，表示是引用不是复制，如果是输出1，表示是复制过来的
+ 	}
+
+ 	num++;
+ 	g();
+ }
+ f();
+---2.父函数没调用产生不通的闭包
+   function f(){
+// 	var num = 1;
+
+// 	return function(){
+// 		num++;
+// 		alert(num);
+// 	}
+
+// }
+// var result1 = f();//产生一个 词法环境
+
+// result1();
+// result1();
+
+// var result2 = f();//产生一个词法环境
+// result2();
+// result2();
+
+ 
+
+
