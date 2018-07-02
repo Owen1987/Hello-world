@@ -147,22 +147,21 @@ for( i=1;i<=3;i++){
  f();
 ---2.父函数没调用产生不通的闭包
    function f(){
-// 	var num = 1;
+ 	var num = 1;
 
-// 	return function(){
-// 		num++;
-// 		alert(num);
-// 	}
+ 	return function(){
+ 		num++;
+		alert(num);
+ 	}
 
-// }
-// var result1 = f();//产生一个 词法环境
+ }
+ var result1 = f();//产生一个 词法环境
 
-// result1();
-// result1();
-
-// var result2 = f();//产生一个词法环境
-// result2();
-// result2();
+ result1();
+  result1();
+ var result2 = f();//产生一个词法环境
+ result2();
+ result2();
 
  
 
