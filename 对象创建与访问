@@ -2,8 +2,10 @@
 1.js内置对象 undefined null number string  boolean  object
 2.宿主环境 window  document
 3.自己创建的
+对象的操作：
+       成员的遍历   检查对象是否有某法属性  成员的删除（有些属性是不能删除的）
 
-----自己创建：1.对象字面量 2.Object函数创建3.
+----自己创建：1.对象字面量 2.Object函数创建
    1.1 对象字面量：属性 方法    get set型属性
      var p={
                   name:"cj",
@@ -57,3 +59,43 @@
              }
           }
       })
+
+
+对象的操作：
+    反射循环遍历：
+      for(sx in p){
+      console.log(sx);//遍历出的属性，无序
+      console.log(p[sx]);//遍历出的属性值 enuerable:false为不能遍历的
+      }
+      第二种： Obeject.keys()
+      Obeject.keys(p);//遍历属性，直接保存在数组里面，有序
+  
+  
+ 检查对象是有那个属性：
+   "name" in p;//true
+   p.hasOwnProperty("name");
+ 删除成员： configuarable:false  writable:false 不能删除
+   delete p.name;
+ 成员的特性： enuerable  configuarable  writable
+ 得到对象的属性特性的描述：Object.getOwnPropertyDescriptor(p,"address")
+      
+构造器与类型检测：constructor
+var o={};
+var o1=new Object();
+o.constructor===o1.constructor;//true 两种的构造器都是  function Object()
+
+Number.constructor --> function Function()---(最顶级构造器)
+Function.constructor --> function Function()
+var a=1;
+a.constructor --> function Number()
+构造器：
+Function-->Function -->  Object  Number  Array
+      Object -->   {}  new Object()
+      Number -->  var a=1;  new Number(1);
+      Array
+      
+ var  o={};  
+ o  instanceof Object;//true
+  o  instanceof o.constructor;//ture
+
+      
