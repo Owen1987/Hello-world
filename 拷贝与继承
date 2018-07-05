@@ -56,6 +56,11 @@
    	   this.language = "java";
     }
 
+-------create实现继承-------
+		---浏览器自带的继承create----
+		   用法1var chid= Obeject.create(parent)
+		   用法2：var chid = Obeject.create(parent,{age:{value:20},salary:{value:1000}}
+		   实现原理：
 	var p ={name:"cj"};
 //Douglas Crockford  
 	function myCreate(p){
@@ -65,12 +70,10 @@
 		ins =  new F();
 		return ins ;
 	}
-//对象的__proto__ 指向的是
-//对象的构造器constructor
-//的原型对象（prototype）
-
+//对象的__proto__ 指向的是对象的构造器constructor的原型对象（prototype）
+  ff=new FF();
+  ff.__proto__===FF.prototype;//true 
+   ff.__proto__=ff.constructor.prototype;//true
 //但原型对象并不是能用上面的话来说明
-//原型对象的__proto__指向的是Object得prototype
-//而不是指向
-//其(Object.prototype)构造器constructor ==某个函数
-//的原型对象
+//原型对象的__proto__指向的是Object得prototype而不是指向其(Object.prototype)构造器constructor ==某个函数的原型对
+
