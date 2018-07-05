@@ -1,5 +1,5 @@
 拷贝：浅拷贝  深拷贝
-继承：使用父的东西或引用父的东西
+继承：使用父的东西或引用父的东西（对象式继承  类继承）
     1.子复制父的东西
     2.子链接到父
 1.字面量函数实现拷贝    
@@ -21,7 +21,7 @@
 
  function  extend (p,c) {
       var c = c ||{};
-      for(var prop in p){
+      for(var prop in p){//利用for in  来实现继承
         c[prop] = p[prop];
       }
  }
