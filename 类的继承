@@ -65,3 +65,4 @@ var f=new F();
 F.prototype.isPrototypeOf(f);//true F原型对象是不是f对象的原型
 
 Object.getPrototypeOf(f);//F{} 只知道对象，通过getPrototypeOf()得到对象的原型对象
+
