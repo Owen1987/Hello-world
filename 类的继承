@@ -1,4 +1,5 @@
 创建父类 创建子类  建立关系    通用继承方法与super
+判断原型---hasOwnProperty()  isPrototypeOf(f)   Object.getPrototypeOf(f)
 
 function P(){
 
@@ -50,3 +51,17 @@ function C(){
    
    Child.super=Child.base=Parent.prototype;//--跟base
  }
+
+----hasOwnProperty()
+function F(){};
+var f=new F();
+f.name="cj";
+f.hasOwnproperty("name");//true，对象层面判断是否拥有自己的属性
+不能下面这样写的
+Object.hasOwnproperty(f,"name");//false这些写是错误的
+-----isPrototypeOf()
+function F(){};//可以看着是一个函数，也可以看着是一个对象
+var f=new F();
+F.prototype.isPrototypeOf(f);//true F原型对象是不是f对象的原型
+
+Object.getPrototypeOf(f);//F{} 只知道对象，通过getPrototypeOf()得到对象的原型对象
