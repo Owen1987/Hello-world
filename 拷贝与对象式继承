@@ -75,5 +75,5 @@
   ff.__proto__===FF.prototype;//true 
    ff.__proto__=ff.constructor.prototype;//true
 //但原型对象并不是能用上面的话来说明
-//原型对象的__proto__指向的是Object得prototype而不是指向其(Object.prototype)构造器constructor ==某个函数的原型对
+//原型对象的__proto__指向的是Object得prototype而不是指向其(Object.prototype)构造器constructor ==某个函数的原型
 
