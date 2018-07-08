@@ -1,0 +1,145 @@
+ 测试 json.cn    geojson.io
+
+JSON(JavaScript Object Notation) 是一种轻量级的数据交换格式,即Javascript对象标记法。
+JSON 是 JS 对象的字符串表示法，它使用文本表示一个 JS 对象的信息，本质是一个字符串。
+JSON的语法规则是参考Javascript的对象的，而不是指只能用于Javascript语言
+JSON的语法规则：
+ 数组Array用方括号[]表示
+ 对象Object用大括号{}
+ 名称/值对（name/value）组合成数组和对象
+ 名称（name）置于双引号中，值（value）有字符串 数值 布尔值 null 对象 数组（7种）,注意：不能有undefined、函数等
+ 并列的数据之间用逗号（","）分割
+ JSON
+ {
+   "name":"Geoff Lui"
+   "age":26，
+   "friends":["Lily","Lucy","Owen"]
+ }
+ 
+ JSON 和XML
+ 相比XML的优势
+  --没有结束标签，长度更短，读写更快
+ -- 能够直接被JavaScript解析器解析
+ --- 可以使用数组
+ XML：
+<root>
+    <name>Geoff Lui</name>
+    <age>26</age>
+    <friends>Lily</friends>
+    <friends>Lucy</friends>
+    <friends>Owen</friends>
+</root>
+
+var str = '{"name": "Geoff Lui", "age": 26}';
+var obj =JSON.parse(str);//转为JSON对象
+var jsonstr=JSON.stringify(obj);//转为JSON字符串
+-------字符串转对象 ---eval()不安全，JSON.parse()
+var str="console.log("hello")"
+  eval(str);//hello
+
+var str = '{"name": "Geoff Lui", "age": 26}';
+var obj = JSON.parse(str, fun);//带函数,此函数有两个参数，name value，每组名称/值对都调用此函数
+function fun(name, value){
+	
+	if( name == "age" )
+		value = 14;
+	return value;
+}
+console.log(obj);
+
+-------对象转字符串
+var obj = {
+	a: 1,
+	b: 2,
+	c: 3,
+	d: 4
+};
+console.log(obj);
+var jsonstr = JSON.stringify(obj, ["c","a","b"], "\t" );//第二个参数为输出字符串的方式
+console.log(jsonstr);
+
+---JSON和XML的转换
+<script src="jquery.xml2json.js"></script>
+<script src="jquery.json2xml.js"></script> 
+<script>
+var str = "<root>" +
+		  "<name>Geoff Lui</name>" +
+		  "<age>26</age>" +
+		  "<friends>Alice</friends>" +
+		  "<friends>Gwen</friends>" +
+		  "</root>";
+console.log(str);
+var obj = $.xml2json(str);
+console.log(obj);
+var jsonstr = JSON.stringify(obj);
+console.log(jsonstr);
+var person = {
+	name: "Geoff Lui",
+	age: 26,
+	mother: {
+		name: "Lucy",
+		age: 54
+	},
+	a: function(){
+		return 1;
+	},
+	b: null,
+	c: undefined
+};
+var xmlstr = $.json2xml(person);
+console.log(xmlstr);
+</script>
+
+-----GeoJSON和TopoJSON------
+GeoJSON和TopoJSON是符合JSON语法规则的两种数据格式，用于表示地理信息
+GeoJSON是基于JavaScript 对象表示法的地理空间信息数据交换格式。
+GeoJSON的最外层是一个单独的对象（object），这个对象可表示：
+--几何体（Geometry）
+-特征（Feature）
+-特征集合（Featurecollection）
+
+每一个GeoJSON的对象都有一个type属性，表示对象的类型，type的值必须是下面之一
+Point：点
+MultiPoint：多点
+LineString：线
+MultiLineString：多线
+Polygon：面
+MultiPloygon：多面
+Geometrycollection:几何体集合
+Feature：特征
+FeatureCollection：特征集合
+
+{ "type": "FeatureCollection",
+  "features": [
+    { "type": "Feature",
+      "geometry": {"type": "Point", "coordinates": [102.0, 0.5]},
+      "properties": {"prop0": "value0"}
+      },
+    { "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [102.0, 0.0], [103.0, 1.0], [104.0, 0.0], [105.0, 1.0]
+          ]
+        },
+      "properties": {
+        "prop0": "value0",
+        "prop1": 0.0
+        }
+      },
+    { "type": "Feature",
+       "geometry": {
+         "type": "Polygon",
+         "coordinates": [
+           [ [100.0, 0.0], [101.0, 0.0], [101.0, 1.0],
+             [100.0, 1.0], [100.0, 0.0] ]
+           ]
+       },
+       "properties": {
+         "prop0": "value0",
+         "prop1": {"this": "that"}
+         }
+       }
+     ]
+   }
+
