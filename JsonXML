@@ -105,15 +105,35 @@ LineString：线
 MultiLineString：多线
 Polygon：面
 MultiPloygon：多面
+
 Geometrycollection:几何体集合
 Feature：特征
 FeatureCollection：特征集合
+1.如果type的值为Point MultiPoint LineStrin MultiLineString Polygon MultiPloygon之一对应的该对象必须有变量coordinate
+  {
+  "type":"Point",
+   "coordinates":[100,40]
+  }
+2.如果type的值为Geometrycollection 那么该对象必须有变量geometries，其值是一个数组，数组的每一项是一个Geojson的集合对象
 
+{ "type": "Geometrycollection",
+  "geometries":[
+  {
+    "type":"Point",
+    "coordinates":[100,40]
+  },{
+    "type":"LineString",
+    "coordinates":[[100,30],[100,35]]
+  }
+  ]
+ }
+
+3.如果type的值为 FeatureCollection，那么该对象有Features成员，该成员有type：Feature  gemometry properties
 { "type": "FeatureCollection",
   "features": [
-    { "type": "Feature",
-      "geometry": {"type": "Point", "coordinates": [102.0, 0.5]},
-      "properties": {"prop0": "value0"}
+    { "type": "Feature",//特征
+      "geometry": {"type": "Point", "coordinates": [102.0, 0.5]},//几何体
+      "properties": {"prop0": "value0"}//特性
       },
     { "type": "Feature",
       "geometry": {
@@ -142,4 +162,17 @@ FeatureCollection：特征集合
        }
      ]
    }
-
+   
+   ----TopoJSON-----
+   TopoJSON是GeoJSON按拓扑学编码后的扩展形式，是有D3的作者制定，相比GeoJSON直接使用Polygon Point之类的几何体
+   来表示图形的方法，TopoJSON中的每一个几何体都是通过将共享边（被称为arcs）整合后组成的
+   
+   TopJSON消除了冗余，文件大小缩小了80%，因为
+    边界线只记录一次，地理坐标使用整数，不使用浮点数
+    
+    比如说：china.geojson的大小约250kb，转化成TopoJSON后才40多KB
+    在线工具
+     在线生成GeoJSON：http://geojson.io/
+      转换GeoJSON 和TopoJSON ： http://mapshaper.org/
+   
+   
