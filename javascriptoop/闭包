@@ -1,0 +1,168 @@
+闭包就是能够读取其他函数内部变量的函数。
+例如在javascript中，只有函数内部的子函数才能读取局部变量，
+所以闭包可以理解成“定义在一个函数内部的函数“。
+在本质上，闭包是将函数内部和函数外部连接起来的桥梁。形成了作用域链
+第一种：f2没有离开f1，访问f1的变量，形成闭包
+function f1(){
+   var a= 10;
+   var b = 20;
+   function f2(){
+       console.log(a);
+   }
+   f2();
+}
+f1();
+第二种：f2被return离开了f1，仍然访问 f1的变量，形成闭包
+function f1(){
+   var  a = 10;
+   var  b = 20;
+   return function f2(){
+      console.log(a);
+   }
+}
+var result = f1();
+result();
+
+第三种：子f2没有使用f1的变量 不形成闭包
+function f1(){
+   var m = 10;
+   function f2(){//没有用父函数f1()的东西,不产生闭包
+      console.log("absc");
+   }
+   f2();
+}
+f1();
+
+第四种：f3不直接访问父函数f2，会访问父函数的父函数，形成闭包
+function f1(){
+  var m = 10;
+   function f2(){
+      var n = 20;
+      function f3(){//不直接使用父函数，而是使用父函数的父函数，能捕获变量
+        console.log(m);//10
+      }
+     f3(); 
+   }
+   f2()
+}
+f1();
+
+使用闭包的好处：
+1.减少全局变量的定义，防变量污染（即时函数）
+2.减少传递函数的参数数量
+3.封装
+     1-1 实现了累加，但产生了全局变量a
+      var  a=0;
+      function add(){
+         a++;
+         alert(a);
+      }
+      add();
+      add();
+     通过闭包避免全局变量
+     function f(){
+        var a=0;
+        return function(){
+          a++;
+          alert(a);
+        }
+     }
+     var result =f();
+     result();
+     result();
+     
+     2-1:减少参数传递
+     function add(base,max){}
+     使用闭包：
+     function calFactory(base){
+     
+        return function(max){
+          var total =0;
+          for(var i=1;i<=max;i++){
+            total +=i;
+          }
+          return  total+base;
+        }
+       }
+        var adder=calFactory(2);
+        alert(adder(3));
+        
+        var adder2=calFactory(3)//换base
+        alert(adder2(3))
+     
+     3-1：封装：
+     (function(){
+         var m=0;
+         function getM(){
+         return m;
+         }
+         function setM(){
+         m=val;
+         }
+         window.g=getM;
+         windwo.f=setM;
+     })();
+     f(12);
+     alert(g());
+     
+     闭包使用的注意点：
+ 1.对捕获的变量只是个引用，不是复制
+ 2.父函数每调用一次，会产生不同的闭包
+ 3.循环中的问题
+<div id="1">1</div>
+<div id="2">2</div>
+<div id="3">3</div>
+<script type="text/javascript">
+---3.循环中的问题
+ 通过闭包解决循环问题
+var i;
+for( i=1;i<=3;i++){
+	var ele = document.getElementById(i);
+	ele.onclick=(function(id){
+			return function(){
+				alert(id);
+			}
+		})(i);
+}
+
+   for(var i=1;i<=3;i++){
+      var ele = document.getElementById(i);
+         ele.onclick=function(){
+           alert(i);//4 4 4
+           alert(this.id);//1  2   3通过this解决
+      }
+   }
+
+-----1.是对变量的引用，而不是复制
+ function f(){
+ 	var num = 1;
+
+ 	function g(){
+ 		alert(num); //输出2，表示是引用不是复制，如果是输出1，表示是复制过来的
+ 	}
+
+ 	num++;
+ 	g();
+ }
+ f();
+---2.父函数没调用产生不通的闭包
+   function f(){
+ 	var num = 1;
+
+ 	return function(){
+ 		num++;
+		alert(num);
+ 	}
+
+ }
+ var result1 = f();//产生一个 词法环境
+
+ result1();
+  result1();
+ var result2 = f();//产生一个词法环境
+ result2();
+ result2();
+
+ 
+
+
