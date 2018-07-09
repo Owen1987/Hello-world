@@ -1,0 +1,134 @@
+alert(a);//1
+alert(b);//undfined
+alert(c);//报错
+alert(d);//报错
+var a=1;
+if(false){
+ var b=2;
+}else{
+c=3;
+}
+function f(){
+  var d=4;
+}
+//----js没有块作用域
+for(var i=0;i<3;i++){
+}
+alert(i);//3 表示js语言没有块作用
+
+//----js没有动态作用域
+  function f(){
+   alert(x); 
+  }
+  function f1(){
+  var x=5;
+  f();
+  }
+function f2(){
+  var x=6;
+  f();
+}
+f1();//报错，x is not defined ---说明js没有动态作用域
+f2();//报错，x is not defined 
+//---js没有函数作用域 和 动态作用域；只有静态作用域（也就是闭包）
+  var x=100;
+  function f(){
+  //var x=60; //如果不注释  结果输出60
+   alert(x); 
+  }
+  function f1(){
+  var x=5;
+  f();
+  }
+function f2(){
+  var x=6;
+  f();
+}
+f1();//100
+----分析静态作用域
+  function f(){//浏览器解析创建时 scope==window
+     //f()被调用时，创建自己的词法作用域 le{x=100} ->f.[[scope]]
+    var  x=1000;
+    function g(){//创建时 g.[[scope]]==f.le
+      //被调用运行时 le->g.[[scope]]
+    }
+    g();
+  }
+  f();
+  形成作用域链：le->g.[[scope]] ->f.le ->f.[[scope]]==window
+复习：创建函数的几种方法
+  function f(){}
+ var f=function(){}
+ var f=function x(argument){}
+ var f=new Function("","alert(x)")//这种方式创建的函数作用域指向全局
+
+//一般函数的定义，正常的作用域链
+function f(){
+   var x = 100;
+   var g = function (){
+      alert(x);
+   }
+    g();
+}
+f();   //调用 函数，输出100
+
+//举例：使用new的创建的函数 指想window
+var  x=12;//加上这句输出12，不加的话，程序会报错，说明new出来的是指向全局的
+function f(){
+   var x = 100;
+   var g =new Function ("","alert(x)");
+    g();
+}
+f();  //这里输出12
+
+
+
+
+//举例  js没有  函数作用域
+  function f(){
+     var x=6;
+     function g(){
+        alert(x);//如果是函数作用域，则不能访问到x=6，但现在可以
+     }
+  }
+
+
+//举例：说明js没有动态作用域
+function f(){
+    alert(x);
+}
+function  f1(){
+  var x = 5;
+  f();//没有动态作用域就不会访问f1的 x变量
+}
+function f2(){
+   var  x = 6;
+   f();
+}
+f1();//如果是动态作用应该会输出5
+f2();//如果是动态作用应该会输出6
+
+//举例 作用域链
+var a=100; // 第三是找到作用域的这个层
+function f(){
+    var a=2;  // 第二是找个作用域的这个层
+    function g(){
+          var a = 5; //最先找到这个来输出
+        console.log(a)
+          } 
+      g();
+          } 
+f();
+
+扩展----
+ (function(){
+    var a=5;
+    var b=6;
+    function f(){
+      alert(a);    
+    }
+    window.f=f;
+ })();
+ f();//强类型语言是获取不到a=5  b=6的，这是js的特殊之处
+ 
+
