@@ -58,3 +58,4 @@ var p1=new Person("cj","22");
      }   
    }
    测试  var p2=New(Person)("cj",22);
+
