@@ -1,0 +1,97 @@
+
+Ajax 即“Asynchronous Javascript And XML”（异步 JavaScript 和 XML），是指一种创建交互式网页应用的网页开发技术。
+Ajax = 异步 JavaScript 和 XML（标准通用标记语言的子集）。Ajax 是一种用于创建快速动态网页的技术。
+
+HTTP
+ 一个完整的http请求
+ 1.建立tcp连接
+ 2.web浏览器向web服务器发送请求命令
+ 3.web浏览器发送请求头信息；
+ 4.web服务器应答；
+ 5.web服务器发送响应头信息
+ 6.web服务器向web浏览器发送数据
+ 7.web服务器关闭tcp连接
+ 
+ 请求的组成
+ 1.请求方法，post/get  URL
+ 2.请求头   客服端的环境
+ 3.请求体   正文
+ 
+ 响应的组成
+ 1.数字和代码组成过得状态码    
+ 2.响应头    服务器的类型，时间，日期
+ 3.响应体    正文
+ 
+ http的状态码
+ 1XX  ：信息类，表示收到了web浏览器的请求，正在处理
+ 2XX  ：成功，表示请求已经被正确接受了   200 ok
+ 3XX  :重定向，表示请求没有成功，需要客户进一步的操作
+ 4XX  ：客户端错误，客户端的请求出错    404 not found 
+ 5XX  ：服务器错误，代表服务器不能完成请求的处理  505
+ 常用状态码及其含义：
+      404 没找到页面(not found)
+      403 禁止访问(forbidden)
+      500 内部服务器出错(internal service error)
+      200 一切正常(ok)
+      304 没有被修改(not modified)
+
+ post/get
+ 查询---get（幂等）
+ 
+ 对服务器进行操作---增删改  post
+ 以下对数据格式是JSON  XML
+ test.json
+ {
+	"name": "Geoff Lui",
+	"age": 26,
+	"friends": ["Alice", "Gwen", "Lucy"]
+}
+test.xml
+<root>
+	<name>Geoff Lui</name>
+	<age>26</age>
+	<friends>Alice</friends>
+	<friends>Gwen</friends>
+	<friends>Lucy</friends>
+</root>
+
+<script>
+var xmlhttp;
+xmlhttp = CreateXHR();//1.创建 var xmlhttp=new XMLHttpRequest()对象
+//xmlhttp.open("GET","test.xml",true);//2.发送请求的细节open(method, url, asynch)
+xmlhttp.open("GET","test.json",true);
+                   post时，open后有请求头：xmlhttp.setRequestHeader(header,value)
+                   如：xmlhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded')
+xmlhttp.send();//3.send 方法可为已经待命的请求发送指令get方式send(null) 
+                  post方式send(data)如send("password="+password+"&name="+name)
+
+xmlhttp.onreadystatechange = function(){
+
+	if( xmlhttp.readyState == 4 && xmlhttp.status == 200 ){
+
+//		var xmlroot = xmlhttp.responseXML;//responseXML表示服务器返回的是xml
+//		console.log(xmlroot);
+//		var friends = xmlroot.getElementsByTagName("friends");
+//		console.log(friends);
+		var  jsonstr=xmlhttp.responseText;//responseText表示返回的是html json text等串
+        console.log(jsonstr);
+        var obj=JSON.parse(jsonstr);
+        console.log(obj);
+	}
+
+}
+function CreateXHR(){
+	if(window.XMLHttpRequest){
+		// IE7++, Chrome, Firefox, ..
+		return new XMLHttpRequest();
+	}else{
+		// IE6, IE5
+		return new ActiveXObject("Microsoft.XMLHTTP");
+	}
+}
+</script>
+
+对比小结：
+若应用程序不需要与其他应用程序共享数据的时候, 使用 HTML 片段来返回数据时最简单的
+如果数据需要重用, JSON 文件是个不错的选择, 其在性能和文件大小方面有优势
+当远程应用程序未知时, XML 文档是首选, 因为 XML 是 web 服务领域的 “世界语”
