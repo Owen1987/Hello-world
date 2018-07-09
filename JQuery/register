@@ -1,0 +1,117 @@
+; !function (window) {
+    var validator = {
+        isPass: false,//数据验证是否通过
+        checkUser: function (val, $show) {//验证用户名
+            var reg = /^[0-9a-zA-Z][0-9a-zA-Z_.-]{2,16}[0-9a-zA-Z]$/;
+            if (val == "") {
+                $show.removeClass().addClass("error_prompt");
+                $show.html("通行证用户名不能为空，请输入通行证用户名");
+                this.isPass = false;
+            } else if (reg.test(val) == false) {
+                $show.removeClass().addClass("error_prompt");
+                $show.html("1、由字母、数字、下划线、点、减号组成<br/>2、只能以数字、字母开头或结尾，且长度为4-18");
+                this.isPass = false;
+            } else {
+                $show.removeClass().addClass("ok_prompt").html("通行证用户名输入正确");
+                this.isPass = true;
+            }
+        },
+        checkPassword: function (val, $show) {//验证密码
+            if (val == "") {
+                $show.removeClass().addClass("error_prompt").html("密码不能为空，请输入密码");
+                this.isPass = false;
+            } else if (val.length < 6 || val.length > 16) {
+                $show.removeClass().addClass("error_prompt").html("密码长度为6-16");
+                this.isPass = false;
+            } else {
+                $show.removeClass().addClass("ok_prompt").html("密码输入正确");
+                this.isPass = true;
+            }
+        },
+        checkPasswordAgain: function (val, $show) {//验证确认密码
+            if (val == "") {
+                $show.removeClass().addClass("error_prompt").html("重复密码不能为空，请重复输入密码");
+                this.isPass = false;
+            } else if (val != $("#pwd").val()) {
+                $show.removeClass().addClass("error_prompt").html("两次输入的密码不一致，请重新输入");
+                this.isPass = false;
+            } else {
+                $show.removeClass().addClass("ok_prompt").html("两次密码输入正确");
+                this.isPass = true;
+            }
+        },
+        checkNickName: function (val, $show) {//验证昵称
+            var reg = /^([\u4e00-\u9fa5]|\w|[@!#$%&*])+$/;   // 匹配昵称
+            var chinaReg = /[\u4e00-\u9fa5]/g;   //匹配中文字符
+            var len = val.replace(chinaReg, "ab").length;  //把中文字符转换为两个字母，以计算字符长度
+            if (val == "") {
+                $show.removeClass().addClass("error_prompt").html("昵称不能为空，请输入昵称");
+                this.isPass = false;
+            } else if (reg.test(val) == false) {
+                $show.removeClass().addClass("error_prompt").html("只能由汉字、字母、数字、下划线以及@!#$%&*特殊字符组成");
+                this.isPass = false;
+            } else if (len < 4 || len > 20) {
+                $show.removeClass().addClass("error_prompt").html("1、长度为4－20个字符<br/>2、一个汉字占两个字符");
+                this.isPass = false;
+            } else {
+                $show.removeClass().addClass("ok_prompt").html("昵称输入正确");
+                this.isPass = true;
+            }
+        },
+        checkMobile: function (val, $show) {//验证手机号
+            var reg = /^(13|15|18)\d{9}$/;
+            if (val == "") {
+                $show.removeClass().addClass("error_prompt").html("关联手机号码不能为空，请输入关联手机号码");
+                this.isPass = false;
+            } else if (reg.test(val) == false) {
+                $show.removeClass().addClass("error_prompt").html("关联手机号码输入不正确，请重新输入");
+                this.isPass = false;
+            } else {
+                $show.removeClass().addClass("ok_prompt").html("关联手机号码输入正确");
+                this.isPass = true;
+            }
+        },
+        bindEvent: function () {//绑定事件
+            //绑定用户名
+            $("#userName").blur(function () {
+                var $show = $("#userNameId");
+                validator.checkUser(this.value, $show);
+            });
+            $("#pwd").blur(function () {
+                var $show = $("#pwdId");
+                validator.checkPassword(this.value, $show);
+            });
+            $("#repwd").blur(function () {
+                var $show = $("#repwdId");
+                validator.checkPasswordAgain(this.value, $show);
+            });
+            $("#nickName").blur(function () {
+                var $show = $("#nickNameId");
+                validator.checkNickName(this.value, $show);
+            });
+            $("#tel").blur(function () {
+                var $show = $("#telId");
+                validator.checkMobile(this.value, $show);
+            });
+            $("#registerForm").submit(function () {
+                $("#userName").trigger("blur");
+                $("#pwd").trigger("blur");
+                $("#repwd").trigger("blur");
+                $("#nickName").trigger("blur");
+                $("#tel").trigger("blur");
+                if (validator.isPass) {
+                    console.log("表单提交成功！");
+                }
+                return false;
+            });
+        },
+        init: function () {//初始化
+            $(".error_prompt").html("").removeClass("error_prompt");
+            this.bindEvent();
+        }
+    };
+    window.validator = validator;
+}(window);
+$(function () {
+    validator.init();
+});
