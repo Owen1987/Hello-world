@@ -1,0 +1,70 @@
+  alert() --window.alert("sometext") 
+            alert("Hello\nHow are you?");//\n  为换行
+  confirm()--window.confirm("sometext");
+           var r=confirm("按下按钮");
+            if (r==true)
+            {
+                x="你按下了\"确定\"按钮!";
+            }
+            else
+            {
+                x="你按下了\"取消\"按钮!";
+            }
+  
+  prompt()--window.prompt("sometext","defaultvalue");
+          var person=prompt("请输入你的名字","Harry Potter");
+              if (person!=null && person!="")
+              {
+                  x="你好 " + person + "! 今天感觉如何?";
+                  document.getElementById("demo").innerHTML=x;
+              }
+              
+    -----模态框--
+       在html上定义两个div元素，其中外层div表示模态框外面的覆盖层(overlay layer), 内层的div表示模态框
+    <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="UTF-8">
+            <title>模态框</title>
+            <style type="text/css">
+              /* 定义模态对话框外面的覆盖层样式 */
+                #modal-overlay {
+                             visibility: hidden;    
+                             position: absolute;   /* 使用绝对定位或固定定位  */
+                             left: 0px;    
+                             top: 0px;
+                             width:100%;
+                             height:100%;
+                             text-align:center;
+                             z-index: 1000;
+                             background-color: #333; 
+                             opacity: 0.5;   /* 背景半透明 */
+                        }
+                /* 模态框样式 */
+                        .modal-data{
+                            width:300px;
+                             margin: 100px auto;
+                             background-color: #fff;
+                             border:1px solid #000;
+                             padding:15px;
+                             text-align:center;
+                        }
+
+            </style>
+          </head>
+          <body>
+              <div id="modal-overlay"> 
+                    <div class="modal-data">        
+                        <p>一个很简单的模态对话框 </p>
+                        <p>点击<a onclick="overlay()" href="#">这里</a>关闭</p>
+                    </div>
+             </div>
+             <a onclick="overlay()" href="#">点击这里</a>
+            <script type="text/javascript">
+              function overlay(){
+                  var e1 = document.getElementById('modal-overlay');          
+                  e1.style.visibility =  (e1.style.visibility == "visible"  ) ? "hidden" : "visible";
+              }
+            </script>
+          </body>
+        </html>
