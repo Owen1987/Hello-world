@@ -1,4 +1,4 @@
-   摘自 阮一峰
+   摘自 阮一峰 http://es6.ruanyifeng.com/
    Es6一共有六种声明变量的方法： let const  import class（不属于顶层对象的属性 let a=1;window.a  //undefine）     var function（属于顶层对象的属性，var a= 1; window.a //1）
 一.let和const命令
    let用来声明变量，但只在代码块内有效，即{有效范围}   如{let a= 10; var b=1;}   a //报错(a is not defined) b//1
