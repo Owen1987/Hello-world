@@ -1,0 +1,87 @@
+摘自https://www.jb51.net/article/103198.htm
+第一种：
+   最传统的方式是在head标签内插入<script>标签。注意js需要写dom文档执行完再执行脚本
+   <head>
+      <meta charset="UTF-8">
+      <script type="text/javaScript" src="example.js"></script>
+   </head>
+ 第二种：将所有的<script>标签尽可能地放到<body>标签底部，以尽量避免对页面其余部分下载的影响
+   在IE8+浏览器上已经实现了脚本并行下载，但在某些浏览器中（即使脚本文件放到了<body>标签底部），页面中脚本仍是一个接着一个加载的。
+   所以我们需要下一个方法，即：动态加载脚本。
+  <body>
+ ...... 
+      <script type="text/javaScript" src="example.js"></script>
+  </body>
+  第三种：动态脚本
+    通过文档对象模型（DOM），我们可以几乎可以页面任意地方创建。
+      <script type='text/javascript'>
+        var script = document.createElement('script');
+        script.type = 'text/javaScript';
+        script.src = 'file1.js';
+        document.getElementsByTagName('head')[0].appendChild(script);
+      </script>
+       脚本的执行顺序无法保证
+      当某个脚本对另一个脚本有依赖关系时，就很可能发生错误了。比如，写一个jQuery代码，需要引入jQuery库，然而你写的jQuery代码文件很可能会先完成下载并立即执行，
+      这时浏览器会报错——‘jQuery未定义'之类的，因为此时jQuery库还未下载完成。
+      改进：增加一个回调函数
+      <script type='text/javascript'>
+            function loadScript(url, callback) {
+              var script = document.createElement('script');
+              script.type = "text/javaScript";
+              // IE和opera支持onreadystatechange
+              // safari、chrome、opera支持onload
+              if (script.readyState) {//IE
+                script.onreadystatechange = function() {
+                  if (script.readyState == "loaded"
+                      || script.readyState == "complete") {
+                    script.onreadystatechange = null;
+                    callback();
+                  }
+                };
+              } else {//其他浏览器
+                script.onload = function() {
+                  callback();
+                };
+              }
+              script.src = url;
+              document.getElementsByTagName('head')[0].appendChild(script);
+            }
+    </script>
+    这样便可以实现顺序加载了，写法如下（假设file2依赖file1，file1和file3相互独立）：
+    loadScript(‘file1.js',function(){ loadScript(‘file2.js',function(){}); }); loadScript(‘file3.js',function(){});
+    虽然loadScript函数已经足够好，但还是有些不尽人意的地方——通过分析这段代码，我们知道，loadScript函数中的顺序加载是以脚本的阻塞加载来实现的(正如上述红字部分指出的那样)。
+    而我们真正想实现的是——脚本同步下载并按相应顺序执行，即并行加载并顺序执行。
+    第四种：LABjs库  实现 并行加载与顺序执行（比较完善的）
+          <script src="LAB.js"></script>
+          <script type="text/javaScript">
+              $LAB
+               .script("script1.js").wait()
+               .script("script2-a.js")
+               .script("script2-b.js")
+               .wait(function(){
+                 initScript1();
+                 initScript2();
+               })
+               .script("script3.js")
+               .wait(function(){
+                 initScript3();
+               });
+          </script>
+    第五种：requireJS
+       <script src="require.js"></script>
+        <script type="text/javaScript">
+            require([
+              "script1.js",
+              "script2-a.js",
+              "script2-b.js",
+              "script3.js"
+             ],
+             function(){
+              initScript1();
+              initScript2();
+              initScript3();
+             }
+            );
+        </script>
+    
+      
