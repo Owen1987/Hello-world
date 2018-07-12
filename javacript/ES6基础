@@ -335,8 +335,51 @@ for (let [,value] of map) {
 const { SourceMapConsumer, SourceNode } = require("source-map");
 
 三、字符串的扩展
-        如果使用模板字符串表示多行字符串，所有的空格和缩进都会被保留在输出之中。
-
+      1.Unicode--charCodeAt()  codePointAt()  String.fromCharCode()  String.fromCodePoint()  charAt() at()
+         "\uD842\uDFB7"// "𠮷"  码点在\u0000~\uFFFF之间的字符
+         "\u20BB7"// " 7" 解析出错，因为码点＞0xFFFF，使用｛｝解决
+         "\u{20BB7}" // "𠮷" 
+         
+         var s = "𠮷";
+         s.length // 2  字符串长度误判为2，其实为4
+         s.charAt(0) // ''charAt方法无法读取整个字符，。
+         s.charAt(1) // ''
+         s.charCodeAt(0) // 55362（十进制===0xD842）    charCodeAt方法只能分别返回前两个字节和后两个字节的值
+         s.charCodeAt(1) // 57271（===0xDFB7）
+         s.codePointAt(0) // 134071 （===20BB7） codePointAt方法会正确返回 32 位（4个字节）的 UTF-16 字符的码点
+         s.codePointAt(0).toString(16) // "20bb7"  十进制变成16进制
+         String.fromCharCode(0x20BB7)// >0xFFFF解析错误  码点转回字符
+         String.fromCodePoint(0x20BB7)// "𠮷"
+         'abc'.charAt(0) // "a"
+         '𠮷'.charAt(0) // "\uD842"
+         'abc'.at(0) // "a"  //at()识别>0xFFFF
+         '𠮷'.at(0) // "𠮷"
+         '\u01D1'==='\u004F\u030C' //false  合成Ǒ ,normalize()方法，用来将字符的不同表示方法统一为同样的形式，这称为 Unicode 正规化
+         '\u01D1'.normalize() === '\u004F\u030C'.normalize()
+          codePointAt方法是测试一个 字符 由两个字节还是由四个字节组成的最简单方法。
+            function is32Bit(c) {
+              return c.codePointAt(0) > 0xFFFF;
+            }
+            is32Bit("𠮷") // true 注意了，其他汉字 是两个字节的返回是false
+            is32Bit("a") // false
+       2.确定一个字符串是否包含在另一个字符串中includes()  startsWith() endsWith()
+            indexOf() ---ES5     
+            let s = 'Hello world!';
+            s.startsWith('Hello') // true
+            s.startsWith('world', 6) // true
+            s.endsWith('Hello', 5) // true
+            s.includes('Hello', 6) // false
+        3.repeat()   将原字符串重复n次
+            'x'.repeat(3) // "xxx"
+            'hello'.repeat(2) // "hellohello"
+            'na'.repeat(0) // ""
+         4. 字符串补全长度padStart()padEnd()
+         'x'.padStart(5, 'ab') // 'ababx'
+         'x'.padStart(4, 'ab') // 'abax'
+         'x'.padEnd(5, 'ab') // 'xabab'
+         'x'.padEnd(4, 'ab') // 'xaba'
+         '09-12'.padStart(10, 'YYYY-MM-DD') // "YYYY-09-12"提示字符串格式
+       5.模板字符串---如果使用模板字符串表示多行字符串，所有的空格和缩进都会被保留在输出之中。
       $('#list').html(`
       <ul>
         <li>first</li>
@@ -351,7 +394,7 @@ const { SourceMapConsumer, SourceNode } = require("source-map");
         <li>second</li>
       </ul>
       `.trim());
-      模板字符串中嵌入变量，需要将变量名写在${}之中。
+      模板字符串中嵌入变量，需要将 变量名写在${} 之中。
 
       function authorize(user, action) {
         if (!user.hasPrivilege(action)) {
