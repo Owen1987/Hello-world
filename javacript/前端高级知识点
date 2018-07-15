@@ -1,0 +1,63 @@
+1. promise，原生写一个
+
+2. vue 更新机制，双向绑定
+
+3. react 更新机制，diff算法
+
+4. 前端安全：XSS（跨站脚本攻击），CSRF跨站请求伪造）
+
+5. 前端优化
+
+6. webpack babel配置中的stage-0是什么意思？
+
+7. react生命周期
+
+8. js原型链
+
+9. service work
+
+10. 闭包
+
+11. v8引擎区别浏览器做的优化
+
+12.编译型和解释型语言的区别
+
+13.跟缓存相关的配置
+
+14.如何提高webpack打包的速度
+
+15.nginx转发的配置
+
+16.node 的一些特点
+
+17. node对于字节流的控制
+
+18. https 的过程和服务器搭建
+
+19. http的无状态
+
+20. 如何处理js的错误:eslint。
+
+21. node垃圾回收
+
+22. js内存溢出
+
+23. if([]){} 是true，但是[]==false,因为任何类型跟bool比较都会先转化为数值型。[]是object if的时候不是false
+
+24. this的作用域，()=>{} 箭头函数
+
+25. 实现一个function 输入字符串，验证其字符串是合法的html标签，只要开闭合理就可以。使用栈来解决。
+
+26. setTimeout(function(){},0)和process.nextTick()的区别
+
+27. 红黑树
+
+28. 取得body下所有元素的tagname，并去重输出。
+
+29. 前端国际化
+
+30. react组件，如何更换主题
+
+31. setImmediate
+
+32. flex布局 ie10 11不支持
