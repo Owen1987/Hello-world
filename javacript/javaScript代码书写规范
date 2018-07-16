@@ -254,3 +254,17 @@ eval() 不但混淆语境还很危险，总会有比这更好、更清晰、更�
      //...
      return order;
     }
+十五：Switch必须使用default分支
+switch（num）{
+    case 1:
+        num++;
+        breake;
+    case 2:
+        num--;
+        breake;
+    case 3:
+        num = 0;
+        breake;
+    default:
+        num = 1;
+}
