@@ -1,0 +1,57 @@
+参阅ES5各种继承的优缺点：https://www.jb51.net/article/113628.htm 
+参阅:https://blog.csdn.net/heyue_99/article/details/54932553
+ ES5完美继承方式
+  /*寄生组合式继承*/
+        function inHeritPrototype(SuperType,SubType) {
+            var prototype=Object(SuperType);//创建对象
+            prototype.constructor=SubType;//增强对象
+            SubType.prototype=prototype;
+        }
+        
+        
+        function SuperType(name){//父类（构造器）
+            this.name=name;
+            this.colors=["blue","white"];
+        }
+        SuperType.prototype.sayName=function () {
+            console.log(this.name);
+        };
+
+
+        function SubType(age,name) {//子类（构造器）
+            SuperType.call(this, name);
+            this.age=age;
+        }
+        inHeritPrototype(SuperType,SubType);
+        SubType.prototype.sayAge=function () {
+            return this.age;
+        };
+        var instance1=new SubType("hello",28);//向父亲传参数
+        console.log(instance1);
+     -------------------------------------------------------------------------------   
+     ES5继承实质：先创建实例对象this,再将父类方法添加到this上面。 
+     ES6继承实质：先创造父类的实例对象this,用子类的构造函数修改this.
+     ------------------------------------------------------------------------------------------
+        
+      --------  ES6实现继承：
+        class SuperType{
+             constructor(name){
+                this.name=name;
+                 this.colors=["blue","white"]
+             }
+            sayName(){
+                 console.log(this.name)
+          }
+    }
+
+       class SubType extends SuperType{
+            constructor(name,age){
+                  super(name);//super调用父类的方法，会绑定子类的this.
+                  this.age = age;
+             }
+           sayAge(){
+               return this.age;
+            }
+    }
+    var instance2 = new SubType("hello",29);
+    console.log(instance2);
