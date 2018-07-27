@@ -98,3 +98,37 @@ WTF！！！！我想静静！
 “2 3 5 4 1”
 
 “好滴，等待下一轮面试吧。”
+
+
+------promise----
+var promise=new Promise(function(resolve){
+  setTimeout(function(){
+   console.log('a');
+    resolve();
+},3000);
+});
+promise.then(function(){
+setTimeout(function(res){
+   console.log('b');
+   
+},2000);
+}).then(function(){
+  setTimeout(function(){
+   console.log('c');
+   
+},1000);
+}).then(function(){console.log('d')});
+输出：Promise{}实例 之后3s输出 a   接着  d  差不多1s输出  c     再1s输出  b
+
+
+var a={n:1};
+a.x=a={n:2};   
+console.log(a.x)  输出值？为什么?
+  答：undefined
+  
+  var a={n:1};
+   a={n:2};
+  a.x=a;
+  console.log(a.x) 输出又是什么？
+ 
+  
