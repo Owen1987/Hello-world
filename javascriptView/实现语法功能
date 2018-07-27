@@ -1,0 +1,19 @@
+汤姆大叔的6道javascript编程题题解:https://blog.csdn.net/u010227447/article/details/45717583
+
+请实现如下语法的功能：var a=(5).plus(3).minus(6)//2
+
+1、理解使用(5)和5的区别：--》(5)是一个表达式，它会返回一个Number对象，而5是一个常量，不会返回一个Number对象。
+   console.log( (5).toString() ); // 5
+   console.log( 5.toString() ); // Unexpected token ILLEGAL
+2、构造函数原型的扩展(Object.prototype)
+js中，所有的数字都是一个Number对象，也可以理解为"数字是根据Number构造函数new出来的实例"。每一个对象都有原型，一旦对某个构造函数的原型添加属性或方法，那么以此构造函数new出来的实例都会增加此属性或方法
+  
+  
+  Number.prototype.plus = function(n) {
+    return this.valueOf() + n;
+}
+Number.prototype.minus = function(n) {
+    return this.valueOf() - n;
+}
+console.log( (5).plus(3).minus(6) ) //2
+
